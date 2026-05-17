@@ -24,24 +24,19 @@
   --gold:#F5C842;
   --gold2:#E5A820;
   --gold3:#C88D00;
-
   --black:#000;
   --deep:#050505;
   --card:#0A0A0A;
   --card2:#111111;
-
   --white:#FFFFFF;
   --text:#9A9A9A;
   --line:rgba(245,200,66,.12);
-
   --green:#2EFF9B;
   --red:#FF5F5F;
   --blue:#4DA6FF;
-
   --radius-sm:12px;
   --radius-md:18px;
   --radius-lg:28px;
-
   --shadow-gold:0 10px 40px rgba(245,200,66,.15);
   --shadow-card:0 12px 50px rgba(0,0,0,.6);
 }
@@ -685,10 +680,8 @@ select:focus{
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="top-nav">
   <a href="index.html" class="logo">TRUSTBRIDGE</a>
-
   <div class="menu">
     <a href="index.html">Home</a>
     <a href="marketplace.html">Marketplace</a>
@@ -702,281 +695,95 @@ select:focus{
 
   <!-- LEFT HERO -->
   <section class="hero-side">
-
     <div class="hero-content">
-
-      <div class="hero-badge">
-        🔒 Enterprise Escrow Protection
-      </div>
-
-      <h1 class="hero-title">
-        Secure Global <span>Trading</span> For Modern Commerce
-      </h1>
-
-      <p class="hero-text">
-        TrustBridge protects buyers and sellers with intelligent escrow,
-        verified merchants, fraud detection, and instant dispute resolution.
-      </p>
-
+      <div class="hero-badge">🔒 Enterprise Escrow Protection</div>
+      <h1 class="hero-title">Secure Global <span>Trading</span> For Modern Commerce</h1>
+      <p class="hero-text">TrustBridge protects buyers and sellers with intelligent escrow, verified merchants, fraud detection, and instant dispute resolution.</p>
       <div class="hero-grid">
-
-        <div class="hero-card">
-          <div class="hero-icon">🛡️</div>
-          <h4>Escrow Security</h4>
-          <p>
-            Payments stay protected until both parties confirm satisfaction.
-          </p>
-        </div>
-
-        <div class="hero-card">
-          <div class="hero-icon">⚡</div>
-          <h4>Fast Transactions</h4>
-          <p>
-            Real-time secure transfers with modern transaction monitoring.
-          </p>
-        </div>
-
-        <div class="hero-card">
-          <div class="hero-icon">🌍</div>
-          <h4>Worldwide Access</h4>
-          <p>
-            Trade confidently with verified users from over 190 countries.
-          </p>
-        </div>
-
-        <div class="hero-card">
-          <div class="hero-icon">📈</div>
-          <h4>Seller Growth</h4>
-          <p>
-            Professional dashboards and analytics built for scaling businesses.
-          </p>
-        </div>
-
+        <div class="hero-card"><div class="hero-icon">🛡️</div><h4>Escrow Security</h4><p>Payments stay protected until both parties confirm satisfaction.</p></div>
+        <div class="hero-card"><div class="hero-icon">⚡</div><h4>Fast Transactions</h4><p>Real-time secure transfers with modern transaction monitoring.</p></div>
+        <div class="hero-card"><div class="hero-icon">🌍</div><h4>Worldwide Access</h4><p>Trade confidently with verified users from over 190 countries.</p></div>
+        <div class="hero-card"><div class="hero-icon">📈</div><h4>Seller Growth</h4><p>Professional dashboards and analytics built for scaling businesses.</p></div>
       </div>
-
       <div class="stats">
-        <div class="stat">
-          <h3>14K+</h3>
-          <p>Verified Sellers</p>
-        </div>
-
-        <div class="stat">
-          <h3>$127M</h3>
-          <p>Protected Volume</p>
-        </div>
-
-        <div class="stat">
-          <h3>190+</h3>
-          <p>Countries</p>
-        </div>
+        <div class="stat"><h3>14K+</h3><p>Verified Sellers</p></div>
+        <div class="stat"><h3>$127M</h3><p>Protected Volume</p></div>
+        <div class="stat"><h3>190+</h3><p>Countries</p></div>
       </div>
-
     </div>
-
   </section>
 
   <!-- AUTH SIDE -->
   <section class="auth-side">
-
     <div class="auth-box">
-
-      <div class="form-logo">
-        ⚡ TrustBridge
-      </div>
-
-      <div class="form-sub">
-        Access your secure marketplace account and manage protected global transactions.
-      </div>
+      <div class="form-logo">⚡ TrustBridge</div>
+      <div class="form-sub">Access your secure marketplace account and manage protected global transactions.</div>
 
       <!-- TABS -->
       <div class="tabs">
-        <div class="tab active" id="loginTab" onclick="switchTab('login')">
-          Login
-        </div>
-
-        <div class="tab" id="signupTab" onclick="switchTab('signup')">
-          Sign Up
-        </div>
+        <div class="tab active" id="loginTab" onclick="switchTab('login')">Login</div>
+        <div class="tab" id="signupTab" onclick="switchTab('signup')">Sign Up</div>
       </div>
 
       <!-- LOGIN -->
       <div id="loginForm">
-
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="loginEmail" placeholder="you@example.com">
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="loginPassword" placeholder="••••••••">
-        </div>
-
-        <div class="forgot-link">
-          <a href="#" id="forgotLink">Forgot password?</a>
-        </div>
-
-        <button class="submit-btn" id="loginBtn">
-          <div class="spinner" id="loginSpinner"></div>
-          <span id="loginBtnText">Login to TrustBridge →</span>
-        </button>
-
-        <div class="divider">
-          <div class="divider-line"></div>
-          <span>OR CONTINUE WITH</span>
-          <div class="divider-line"></div>
-        </div>
-
-        <button class="google-btn" id="googleLoginBtn">
-          Continue with Google
-        </button>
-
+        <div class="form-group"><label>Email Address</label><input type="email" id="loginEmail" placeholder="you@example.com"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+        <div class="forgot-link"><a href="#" id="forgotLink">Forgot password?</a></div>
+        <button class="submit-btn" id="loginBtn"><div class="spinner" id="loginSpinner"></div><span id="loginBtnText">Login to TrustBridge →</span></button>
+        <div class="divider"><div class="divider-line"></div><span>OR CONTINUE WITH</span><div class="divider-line"></div></div>
+        <button class="google-btn" id="googleLoginBtn">Continue with Google</button>
         <div id="loginMsg" class="msg-box msg-error"></div>
-
       </div>
 
       <!-- SIGNUP -->
       <div id="signupForm" style="display:none;">
-
-        <div class="form-group">
-          <label>I am a...</label>
-
+        <div class="form-group"><label>I am a...</label>
           <div class="role-group">
-
-            <div class="role-box active"
-                 id="roleBuyer"
-                 onclick="setRole('buyer')">
-              🛒 Buyer
-            </div>
-
-            <div class="role-box"
-                 id="roleSeller"
-                 onclick="setRole('seller')">
-              📦 Seller
-            </div>
-
+            <div class="role-box active" id="roleBuyer" onclick="setRole('buyer')">🛒 Buyer</div>
+            <div class="role-box" id="roleSeller" onclick="setRole('seller')">📦 Seller</div>
           </div>
         </div>
-
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="signupName" placeholder="John Doe">
-        </div>
-
+        <div class="form-group"><label>Full Name</label><input type="text" id="signupName" placeholder="John Doe"></div>
         <div id="sellerExtra">
-
-          <div class="form-group">
-            <label>Business Name</label>
-            <input type="text" id="businessName" placeholder="My Business Ltd">
+          <div class="form-group"><label>Business Name</label><input type="text" id="businessName" placeholder="My Business Ltd"></div>
+          <div class="form-group"><label>Business Category</label>
+            <select id="businessCategory"><option value="">Select category...</option><option>Electronics</option><option>Fashion & Apparel</option><option>Luxury Goods</option><option>Vehicles & Motors</option><option>Industrial & Commercial</option><option>Other</option></select>
           </div>
-
-          <div class="form-group">
-            <label>Business Category</label>
-
-            <select id="businessCategory">
-              <option value="">Select category...</option>
-              <option>Electronics</option>
-              <option>Fashion & Apparel</option>
-              <option>Luxury Goods</option>
-              <option>Vehicles & Motors</option>
-              <option>Industrial & Commercial</option>
-              <option>Other</option>
-            </select>
-          </div>
-
         </div>
-
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="signupEmail" placeholder="you@example.com">
-        </div>
-
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="signupPhone" placeholder="+250 7XX XXX XXX">
-        </div>
-
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="signupPassword" placeholder="Minimum 6 characters">
-        </div>
-
-        <div class="form-group">
-          <label>Confirm Password</label>
-          <input type="password" id="signupConfirm" placeholder="Repeat password">
-        </div>
-
-        <button class="submit-btn" id="signupBtn">
-          <div class="spinner" id="signupSpinner"></div>
-          <span id="signupBtnText">Create Account →</span>
-        </button>
-
-        <div class="divider">
-          <div class="divider-line"></div>
-          <span>OR CONTINUE WITH</span>
-          <div class="divider-line"></div>
-        </div>
-
-        <button class="google-btn" id="googleSignupBtn">
-          Sign Up with Google
-        </button>
-
+        <div class="form-group"><label>Email Address</label><input type="email" id="signupEmail" placeholder="you@example.com"></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="signupPhone" placeholder="+250 7XX XXX XXX"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="signupPassword" placeholder="Minimum 6 characters"></div>
+        <div class="form-group"><label>Confirm Password</label><input type="password" id="signupConfirm" placeholder="Repeat password"></div>
+        <button class="submit-btn" id="signupBtn"><div class="spinner" id="signupSpinner"></div><span id="signupBtnText">Create Account →</span></button>
+        <div class="divider"><div class="divider-line"></div><span>OR CONTINUE WITH</span><div class="divider-line"></div></div>
+        <button class="google-btn" id="googleSignupBtn">Sign Up with Google</button>
         <div id="signupMsg" class="msg-box"></div>
-
       </div>
 
-      <div class="footer-note">
-        By continuing you agree to our
-        <a href="#">Terms</a> &
-        <a href="#">Privacy Policy</a>
-      </div>
-
+      <div class="footer-note">By continuing you agree to our <a href="#">Terms</a> & <a href="#">Privacy Policy</a></div>
     </div>
-
   </section>
-
 </div>
 
-<!-- ======================================================
-     FIREBASE + AUTH LOGIC
-====================================================== -->
-
 <script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  sendPasswordResetEmail,
-  updateProfile
-}
-from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  serverTimestamp
-}
-from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+  getFirestore, doc, setDoc, getDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-/* =========================================================
-   FIREBASE CONFIG
-========================================================= */
-
+// ========== ACTUAL FIREBASE CONFIG (matches your messages.html) ==========
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "XXXXXXXX",
-  appId: "XXXXXXXX"
+  apiKey: "AIzaSyA0mA2YjiIfHU7soCjzSkcddAgVaFE1UMY",
+  authDomain: "trustbridge-a8ab2.firebaseapp.com",
+  projectId: "trustbridge-a8ab2",
+  storageBucket: "trustbridge-a8ab2.firebasestorage.app",
+  messagingSenderId: "933754600933",
+  appId: "1:933754600933:web:b4d5cdfd0b6adc9b11030c"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -985,439 +792,202 @@ const db = getFirestore(app);
 
 let selectedRole = 'buyer';
 
-/* =========================================================
-   TAB SWITCH
-========================================================= */
+// Helper: get redirect target (default: messages.html, but keeps compatibility)
+function getRedirectUrl(role = 'buyer') {
+  // If user came from a specific page, return that
+  const returnUrl = sessionStorage.getItem('redirectAfterLogin');
+  if (returnUrl) {
+    sessionStorage.removeItem('redirectAfterLogin');
+    return returnUrl;
+  }
+  // Otherwise fallback to messages page (or dashboard/marketplace based on role)
+  return role === 'seller' ? 'dashboard.html' : 'messages.html';
+}
 
-window.switchTab = function(tab){
-
-  document.getElementById('loginForm').style.display =
-    tab === 'login' ? 'block' : 'none';
-
-  document.getElementById('signupForm').style.display =
-    tab === 'signup' ? 'block' : 'none';
-
-  document.getElementById('loginTab')
-    .classList.toggle('active',tab === 'login');
-
-  document.getElementById('signupTab')
-    .classList.toggle('active',tab === 'signup');
-
+// Tab switch
+window.switchTab = function(tab) {
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('loginTab').classList.toggle('active', tab === 'login');
+  document.getElementById('signupTab').classList.toggle('active', tab === 'signup');
   clearMessages();
 };
 
-/* =========================================================
-   ROLE SWITCH
-========================================================= */
-
-window.setRole = function(role){
-
+// Role switch
+window.setRole = function(role) {
   selectedRole = role;
-
-  document.getElementById('roleBuyer')
-    .classList.toggle('active', role === 'buyer');
-
-  document.getElementById('roleSeller')
-    .classList.toggle('active', role === 'seller');
-
-  document.getElementById('sellerExtra').style.display =
-    role === 'seller' ? 'block' : 'none';
+  document.getElementById('roleBuyer').classList.toggle('active', role === 'buyer');
+  document.getElementById('roleSeller').classList.toggle('active', role === 'seller');
+  document.getElementById('sellerExtra').style.display = role === 'seller' ? 'block' : 'none';
 };
 
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function clearMessages(){
-
-  ['loginMsg','signupMsg'].forEach(id => {
-
+function clearMessages() {
+  ['loginMsg', 'signupMsg'].forEach(id => {
     const el = document.getElementById(id);
-
     el.style.display = 'none';
     el.textContent = '';
-
   });
-
 }
 
-function showMsg(id,msg,type='error'){
-
+function showMsg(id, msg, type = 'error') {
   const el = document.getElementById(id);
-
   el.textContent = msg;
   el.className = `msg-box msg-${type}`;
   el.style.display = 'block';
-
 }
 
-function setLoading(btnId,spinnerId,textId,loading){
-
+function setLoading(btnId, spinnerId, textId, loading) {
   document.getElementById(btnId).disabled = loading;
-
-  document.getElementById(spinnerId).style.display =
-    loading ? 'block' : 'none';
-
-  document.getElementById(textId).style.display =
-    loading ? 'none' : 'inline';
-
+  document.getElementById(spinnerId).style.display = loading ? 'block' : 'none';
+  document.getElementById(textId).style.display = loading ? 'none' : 'inline';
 }
 
-function friendlyError(code){
-
+function friendlyError(code) {
   const map = {
-
-    'auth/email-already-in-use':
-      'Email already exists.',
-
-    'auth/invalid-email':
-      'Invalid email address.',
-
-    'auth/weak-password':
-      'Password should be at least 6 characters.',
-
-    'auth/user-not-found':
-      'User not found.',
-
-    'auth/wrong-password':
-      'Wrong password.',
-
-    'auth/network-request-failed':
-      'Check your internet connection.',
-
-    'auth/popup-closed-by-user':
-      'Google popup closed.'
+    'auth/email-already-in-use': 'Email already exists.',
+    'auth/invalid-email': 'Invalid email address.',
+    'auth/weak-password': 'Password should be at least 6 characters.',
+    'auth/user-not-found': 'User not found.',
+    'auth/wrong-password': 'Wrong password.',
+    'auth/network-request-failed': 'Check your internet connection.',
+    'auth/popup-closed-by-user': 'Google popup closed.'
   };
-
   return map[code] || 'Something went wrong.';
 }
 
-/* =========================================================
-   LOGIN
-========================================================= */
-
-document.getElementById('loginBtn')
-.addEventListener('click', async ()=>{
-
-  const email =
-    document.getElementById('loginEmail').value.trim();
-
-  const password =
-    document.getElementById('loginPassword').value;
-
-  if(!email || !password){
-
-    showMsg('loginMsg','Please enter email and password.');
+// ========== LOGIN ==========
+document.getElementById('loginBtn').addEventListener('click', async () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!email || !password) {
+    showMsg('loginMsg', 'Please enter email and password.');
     return;
   }
-
-  setLoading(
-    'loginBtn',
-    'loginSpinner',
-    'loginBtnText',
-    true
-  );
-
-  try{
-
-    const cred =
-      await signInWithEmailAndPassword(auth,email,password);
-
-    const snap =
-      await getDoc(doc(db,'users',cred.user.uid));
-
+  setLoading('loginBtn', 'loginSpinner', 'loginBtnText', true);
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    const snap = await getDoc(doc(db, 'users', cred.user.uid));
     const user = snap.data();
-
-    showMsg(
-      'loginMsg',
-      `Welcome back ${user.name || ''}! Redirecting...`,
-      'success'
-    );
-
-    setTimeout(()=>{
-
-      window.location.href =
-        user.role === 'seller'
-        ? 'dashboard.html'
-        : 'marketplace.html';
-
-    },1200);
-
-  }catch(err){
-
-    showMsg('loginMsg',friendlyError(err.code));
-
-  }finally{
-
-    setLoading(
-      'loginBtn',
-      'loginSpinner',
-      'loginBtnText',
-      false
-    );
+    showMsg('loginMsg', `Welcome back ${user.name || ''}! Redirecting...`, 'success');
+    setTimeout(() => {
+      window.location.href = getRedirectUrl(user?.role || 'buyer');
+    }, 1200);
+  } catch (err) {
+    showMsg('loginMsg', friendlyError(err.code));
+  } finally {
+    setLoading('loginBtn', 'loginSpinner', 'loginBtnText', false);
   }
-
 });
 
-/* =========================================================
-   SIGN UP
-========================================================= */
+// ========== SIGN UP ==========
+document.getElementById('signupBtn').addEventListener('click', async () => {
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const phone = document.getElementById('signupPhone').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const confirm = document.getElementById('signupConfirm').value;
+  const businessName = document.getElementById('businessName').value.trim();
+  const category = document.getElementById('businessCategory').value;
 
-document.getElementById('signupBtn')
-.addEventListener('click', async ()=>{
-
-  const name =
-    document.getElementById('signupName').value.trim();
-
-  const email =
-    document.getElementById('signupEmail').value.trim();
-
-  const phone =
-    document.getElementById('signupPhone').value.trim();
-
-  const password =
-    document.getElementById('signupPassword').value;
-
-  const confirm =
-    document.getElementById('signupConfirm').value;
-
-  const businessName =
-    document.getElementById('businessName').value.trim();
-
-  const category =
-    document.getElementById('businessCategory').value;
-
-  if(!name || !email || !password || !confirm){
-
-    showMsg('signupMsg','Fill all required fields.');
+  if (!name || !email || !password || !confirm) {
+    showMsg('signupMsg', 'Fill all required fields.');
+    return;
+  }
+  if (password !== confirm) {
+    showMsg('signupMsg', 'Passwords do not match.');
+    return;
+  }
+  if (selectedRole === 'seller' && !businessName) {
+    showMsg('signupMsg', 'Enter business name.');
     return;
   }
 
-  if(password !== confirm){
-
-    showMsg('signupMsg','Passwords do not match.');
-    return;
-  }
-
-  if(selectedRole === 'seller' && !businessName){
-
-    showMsg('signupMsg','Enter business name.');
-    return;
-  }
-
-  setLoading(
-    'signupBtn',
-    'signupSpinner',
-    'signupBtnText',
-    true
-  );
-
-  try{
-
-    const cred =
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-    await updateProfile(cred.user,{
-      displayName:name
-    });
-
+  setLoading('signupBtn', 'signupSpinner', 'signupBtnText', true);
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(cred.user, { displayName: name });
     const userData = {
-
-      uid:cred.user.uid,
-      name,
-      email,
-      phone,
-      role:selectedRole,
-
-      businessName:
-        selectedRole === 'seller'
-        ? businessName
-        : null,
-
-      category:
-        selectedRole === 'seller'
-        ? category
-        : null,
-
-      createdAt:serverTimestamp(),
-
-      status:
-        selectedRole === 'seller'
-        ? 'pending'
-        : 'active',
-
-      verified:false
+      uid: cred.user.uid, name, email, phone, role: selectedRole,
+      businessName: selectedRole === 'seller' ? businessName : null,
+      category: selectedRole === 'seller' ? category : null,
+      createdAt: serverTimestamp(),
+      status: selectedRole === 'seller' ? 'pending' : 'active',
+      verified: false,
+      online: true,
+      followers: [],
+      following: []
     };
-
-    await setDoc(
-      doc(db,'users',cred.user.uid),
-      userData
-    );
-
-    showMsg(
-      'signupMsg',
-      'Account created successfully!',
-      'success'
-    );
-
-    setTimeout(()=>{
-
-      window.location.href =
-        selectedRole === 'seller'
-        ? 'dashboard.html'
-        : 'marketplace.html';
-
-    },1600);
-
-  }catch(err){
-
-    showMsg('signupMsg',friendlyError(err.code));
-
-  }finally{
-
-    setLoading(
-      'signupBtn',
-      'signupSpinner',
-      'signupBtnText',
-      false
-    );
-
+    await setDoc(doc(db, 'users', cred.user.uid), userData);
+    showMsg('signupMsg', 'Account created successfully!', 'success');
+    setTimeout(() => {
+      window.location.href = getRedirectUrl(selectedRole);
+    }, 1600);
+  } catch (err) {
+    showMsg('signupMsg', friendlyError(err.code));
+  } finally {
+    setLoading('signupBtn', 'signupSpinner', 'signupBtnText', false);
   }
-
 });
 
-/* =========================================================
-   GOOGLE AUTH
-========================================================= */
-
-async function googleSignIn(defaultRole='buyer'){
-
-  try{
-
+// ========== GOOGLE AUTH ==========
+async function googleSignIn(defaultRole = 'buyer') {
+  try {
     const provider = new GoogleAuthProvider();
-
-    const cred =
-      await signInWithPopup(auth,provider);
-
-    const ref = doc(db,'users',cred.user.uid);
-
+    const cred = await signInWithPopup(auth, provider);
+    const ref = doc(db, 'users', cred.user.uid);
     const snap = await getDoc(ref);
-
-    if(!snap.exists()){
-
-      await setDoc(ref,{
-
-        uid:cred.user.uid,
-        name:cred.user.displayName,
-        email:cred.user.email,
-        avatar:cred.user.photoURL,
-        role:defaultRole,
-        createdAt:serverTimestamp(),
-        verified:false,
-        status:'active'
-
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        uid: cred.user.uid,
+        name: cred.user.displayName,
+        email: cred.user.email,
+        avatar: cred.user.photoURL,
+        role: defaultRole,
+        createdAt: serverTimestamp(),
+        verified: false,
+        status: 'active',
+        online: true,
+        followers: [],
+        following: []
       });
-
     }
-
-    const role =
-      snap.exists()
-      ? snap.data().role
-      : defaultRole;
-
-    window.location.href =
-      role === 'seller'
-      ? 'dashboard.html'
-      : 'marketplace.html';
-
-  }catch(err){
-
-    showMsg('loginMsg',friendlyError(err.code));
-
+    const role = snap.exists() ? snap.data().role : defaultRole;
+    window.location.href = getRedirectUrl(role);
+  } catch (err) {
+    showMsg('loginMsg', friendlyError(err.code));
   }
-
 }
 
-document.getElementById('googleLoginBtn')
-.addEventListener('click',()=>googleSignIn('buyer'));
+document.getElementById('googleLoginBtn').addEventListener('click', () => googleSignIn('buyer'));
+document.getElementById('googleSignupBtn').addEventListener('click', () => googleSignIn(selectedRole));
 
-document.getElementById('googleSignupBtn')
-.addEventListener('click',()=>googleSignIn(selectedRole));
-
-/* =========================================================
-   FORGOT PASSWORD
-========================================================= */
-
-document.getElementById('forgotLink')
-.addEventListener('click', async (e)=>{
-
+// ========== FORGOT PASSWORD ==========
+document.getElementById('forgotLink').addEventListener('click', async (e) => {
   e.preventDefault();
-
-  const email =
-    document.getElementById('loginEmail').value.trim();
-
-  if(!email){
-
-    showMsg(
-      'loginMsg',
-      'Enter your email first.'
-    );
-
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email) {
+    showMsg('loginMsg', 'Enter your email first.');
     return;
   }
-
-  try{
-
-    await sendPasswordResetEmail(auth,email);
-
-    showMsg(
-      'loginMsg',
-      'Password reset email sent.',
-      'success'
-    );
-
-  }catch(err){
-
-    showMsg(
-      'loginMsg',
-      friendlyError(err.code)
-    );
-
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showMsg('loginMsg', 'Password reset email sent.', 'success');
+  } catch (err) {
+    showMsg('loginMsg', friendlyError(err.code));
   }
-
 });
 
-/* =========================================================
-   ENTER KEY
-========================================================= */
+// Enter key submissions
+document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('loginBtn').click(); });
+document.getElementById('signupConfirm').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('signupBtn').click(); });
 
-document.getElementById('loginPassword')
-.addEventListener('keydown',e=>{
-
-  if(e.key === 'Enter'){
-
-    document.getElementById('loginBtn').click();
-
+// If user is already logged in, redirect immediately
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Already logged in – send them to messages page (or previous target)
+    window.location.href = getRedirectUrl('buyer');
   }
-
 });
-
-document.getElementById('signupConfirm')
-.addEventListener('keydown',e=>{
-
-  if(e.key === 'Enter'){
-
-    document.getElementById('signupBtn').click();
-
-  }
-
-});
-
 </script>
-
 </body>
 </html>
