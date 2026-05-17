@@ -1,0 +1,607 @@
+/* =========================================================
+   TRUSTBRIDGE SHARED DESIGN SYSTEM — LUXURY GLASS EDITION
+   Use this file as: shared-design.css
+========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+*,
+*::before,
+*::after{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+
+  /* ===== COLORS ===== */
+  --gold:#F5C842;
+  --gold2:#E5A820;
+  --gold3:#C88D00;
+
+  --black:#000000;
+  --deep:#050505;
+  --card:#0A0A0A;
+  --card2:#101010;
+  --card3:#161616;
+
+  --white:#FFFFFF;
+
+  --text:#707070;
+  --text2:#A1A1A1;
+  --text3:#D6D6D6;
+
+  --line:rgba(245,200,66,.10);
+  --line2:rgba(255,255,255,.07);
+  --line3:rgba(255,255,255,.03);
+
+  --green:#2EFF9B;
+  --red:#FF6262;
+  --blue:#4DA6FF;
+
+  /* ===== RADIALS ===== */
+  --gold-glow:rgba(245,200,66,.18);
+  --soft-glow:rgba(255,255,255,.03);
+
+  /* ===== RADIUS ===== */
+  --r-sm:10px;
+  --r-md:16px;
+  --r-lg:24px;
+  --r-xl:34px;
+
+  /* ===== SHADOWS ===== */
+  --shadow-gold:0 20px 60px rgba(245,200,66,.14);
+  --shadow-card:0 14px 40px rgba(0,0,0,.65);
+  --shadow-soft:0 8px 30px rgba(0,0,0,.35);
+
+  /* ===== TRANSITIONS ===== */
+  --transition:.35s cubic-bezier(.22,.61,.36,1);
+
+  /* ===== BACKGROUND ===== */
+  --main-bg:
+    radial-gradient(circle at top right, rgba(245,200,66,.07), transparent 25%),
+    radial-gradient(circle at bottom left, rgba(245,200,66,.04), transparent 30%),
+    linear-gradient(to bottom, #050505, #000000);
+
+}
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--main-bg);
+  color:var(--white);
+  overflow-x:hidden;
+  min-height:100vh;
+  line-height:1.6;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+  width:6px;
+}
+
+::-webkit-scrollbar-track{
+  background:#080808;
+}
+
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(var(--gold),var(--gold2));
+  border-radius:30px;
+}
+
+/* =========================================================
+   TYPOGRAPHY
+========================================================= */
+
+h1,h2,h3,h4,h5,h6{
+  font-family:'Playfair Display',serif;
+  letter-spacing:-1px;
+  line-height:1.1;
+}
+
+.gold-text{
+  color:var(--gold);
+}
+
+.gradient-text{
+  background:linear-gradient(90deg,#fff,var(--gold));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.muted{
+  color:var(--text2);
+}
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.tb-container{
+  width:min(1280px,92%);
+  margin:auto;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.tb-nav{
+  position:sticky;
+  top:0;
+  z-index:999;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 6%;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line2);
+}
+
+.tb-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  color:#fff;
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:20px;
+  letter-spacing:1px;
+}
+
+.tb-logo span{
+  color:var(--gold);
+}
+
+.tb-menu{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.tb-menu a{
+  text-decoration:none;
+  color:rgba(255,255,255,.68);
+  padding:12px 18px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  transition:var(--transition);
+  font-family:'Syne',sans-serif;
+}
+
+.tb-menu a:hover,
+.tb-menu a.active{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-gold);
+}
+
+/* =========================================================
+   HERO SECTION
+========================================================= */
+
+.tb-hero{
+  position:relative;
+  min-height:88vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  padding:120px 8%;
+}
+
+.tb-hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(to right, rgba(0,0,0,.94), rgba(0,0,0,.55)),
+    url('https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1800&q=80') center/cover;
+  opacity:.9;
+}
+
+.tb-hero-glow{
+  position:absolute;
+  width:700px;
+  height:700px;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--gold-glow),transparent 70%);
+  top:-200px;
+  right:-200px;
+  animation:float 8s ease-in-out infinite;
+}
+
+.tb-hero-content{
+  position:relative;
+  z-index:2;
+  max-width:720px;
+  animation:fadeUp 1s ease;
+}
+
+.tb-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 18px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.02);
+  color:var(--gold);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:26px;
+  font-family:'Space Mono',monospace;
+}
+
+.tb-hero h1{
+  font-size:clamp(44px,6vw,84px);
+  font-weight:900;
+  margin-bottom:20px;
+}
+
+.tb-hero h1 em{
+  font-style:italic;
+  color:var(--gold);
+}
+
+.tb-hero p{
+  color:rgba(255,255,255,.65);
+  font-size:18px;
+  line-height:1.8;
+  max-width:620px;
+  margin-bottom:38px;
+  font-weight:300;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.tb-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:14px 28px;
+  border:none;
+  border-radius:999px;
+  cursor:pointer;
+  text-decoration:none;
+  transition:var(--transition);
+  font-size:14px;
+  font-weight:700;
+  font-family:'Syne',sans-serif;
+}
+
+.tb-btn-gold{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;
+  box-shadow:var(--shadow-gold);
+}
+
+.tb-btn-gold:hover{
+  transform:translateY(-3px);
+  box-shadow:0 24px 60px rgba(245,200,66,.25);
+}
+
+.tb-btn-dark{
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.tb-btn-dark:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+  transform:translateY(-3px);
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.tb-card{
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.03),
+    rgba(255,255,255,.015)
+  );
+
+  border:1px solid var(--line2);
+  border-radius:var(--r-lg);
+  backdrop-filter:blur(16px);
+
+  box-shadow:var(--shadow-card);
+
+  transition:var(--transition);
+}
+
+.tb-card:hover{
+  transform:translateY(-8px);
+  border-color:rgba(245,200,66,.18);
+  box-shadow:
+    0 24px 50px rgba(0,0,0,.7),
+    0 0 0 1px rgba(245,200,66,.08);
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.tb-section{
+  padding:110px 8%;
+  position:relative;
+}
+
+.tb-section-tag{
+  display:inline-block;
+  margin-bottom:14px;
+  color:var(--gold);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-family:'Space Mono',monospace;
+}
+
+.tb-section-title{
+  font-size:clamp(34px,4vw,60px);
+  margin-bottom:14px;
+}
+
+.tb-section-title em{
+  color:var(--gold);
+  font-style:italic;
+}
+
+.tb-section-sub{
+  color:var(--text2);
+  max-width:650px;
+  line-height:1.8;
+  font-size:16px;
+  font-weight:300;
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.tb-input,
+.tb-textarea,
+.tb-select{
+  width:100%;
+  padding:14px 18px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.08);
+  background:#0D0D0D;
+  color:#fff;
+  outline:none;
+  transition:var(--transition);
+  font-family:'DM Sans',sans-serif;
+}
+
+.tb-input:focus,
+.tb-textarea:focus,
+.tb-select:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 4px rgba(245,200,66,.08);
+}
+
+.tb-textarea{
+  resize:vertical;
+  min-height:120px;
+}
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.tb-table{
+  width:100%;
+  border-collapse:collapse;
+  overflow:hidden;
+  border-radius:20px;
+}
+
+.tb-table th{
+  background:#090909;
+  color:var(--gold);
+  font-size:12px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  padding:18px;
+}
+
+.tb-table td{
+  padding:18px;
+  border-top:1px solid var(--line2);
+  color:#ddd;
+}
+
+.tb-table tr:hover{
+  background:rgba(255,255,255,.02);
+}
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.tb-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.tb-badge-success{
+  background:rgba(46,255,155,.12);
+  color:var(--green);
+}
+
+.tb-badge-danger{
+  background:rgba(255,95,95,.12);
+  color:var(--red);
+}
+
+.tb-badge-warning{
+  background:rgba(245,200,66,.12);
+  color:var(--gold);
+}
+
+.tb-badge-info{
+  background:rgba(77,166,255,.12);
+  color:var(--blue);
+}
+
+/* =========================================================
+   GLASS EFFECT
+========================================================= */
+
+.tb-glass{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  backdrop-filter:blur(20px);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.tb-footer{
+  padding:34px;
+  text-align:center;
+  border-top:1px solid var(--line2);
+  color:var(--text);
+  font-size:12px;
+  letter-spacing:1px;
+  font-family:'Space Mono',monospace;
+}
+
+/* =========================================================
+   REVEAL ANIMATION
+========================================================= */
+
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:all .8s cubic-bezier(.22,.61,.36,1);
+}
+
+.reveal.visible{
+  opacity:1;
+  transform:none;
+}
+
+/* =========================================================
+   LOADER
+========================================================= */
+
+.tb-loader{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.2);
+  border-top-color:var(--gold);
+  animation:spin .8s linear infinite;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(28px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+@keyframes float{
+  0%,100%{
+    transform:translateY(0);
+  }
+  50%{
+    transform:translateY(-10px);
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:920px){
+
+  .tb-nav{
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .tb-menu{
+    justify-content:center;
+  }
+
+  .tb-hero{
+    min-height:auto;
+    padding:120px 7% 90px;
+  }
+
+  .tb-hero h1{
+    font-size:clamp(38px,12vw,62px);
+  }
+
+  .tb-section{
+    padding:90px 7%;
+  }
+
+}
+
+@media(max-width:640px){
+
+  .tb-menu a{
+    padding:10px 14px;
+    font-size:12px;
+  }
+
+  .tb-btn{
+    width:100%;
+  }
+
+  .tb-section-title{
+    font-size:34px;
+  }
+
+  .tb-card{
+    border-radius:20px;
+  }
+
+}

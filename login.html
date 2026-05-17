@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TrustBridge — Login & Sign Up</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   TRUSTBRIDGE PREMIUM AUTH PAGE
+========================================================= */
+
+*,
+*::before,
+*::after{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+:root{
+  --gold:#F5C842;
+  --gold2:#E5A820;
+  --gold3:#C88D00;
+
+  --black:#000;
+  --deep:#050505;
+  --card:#0A0A0A;
+  --card2:#111111;
+
+  --white:#FFFFFF;
+  --text:#9A9A9A;
+  --line:rgba(245,200,66,.12);
+
+  --green:#2EFF9B;
+  --red:#FF5F5F;
+  --blue:#4DA6FF;
+
+  --radius-sm:12px;
+  --radius-md:18px;
+  --radius-lg:28px;
+
+  --shadow-gold:0 10px 40px rgba(245,200,66,.15);
+  --shadow-card:0 12px 50px rgba(0,0,0,.6);
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(245,200,66,.12), transparent 25%),
+    radial-gradient(circle at bottom right, rgba(245,200,66,.08), transparent 20%),
+    #000;
+  color:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes float{
+  0%,100%{
+    transform:translateY(0px);
+  }
+  50%{
+    transform:translateY(-10px);
+  }
+}
+
+@keyframes pulse{
+  0%,100%{
+    opacity:1;
+  }
+  50%{
+    opacity:.45;
+  }
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+@keyframes shimmer{
+  0%{
+    background-position:-200% center;
+  }
+  100%{
+    background-position:200% center;
+  }
+}
+
+@keyframes tbFadeUp{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+  width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(var(--gold),var(--gold2));
+  border-radius:30px;
+}
+
+::-webkit-scrollbar-track{
+  background:#080808;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.top-nav{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:999;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 6%;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,215,0,.08);
+}
+
+.logo{
+  text-decoration:none;
+  font-family:'Syne',sans-serif;
+  font-size:26px;
+  font-weight:800;
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#fff,var(--gold),#fff);
+  background-size:200%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmer 6s linear infinite;
+}
+
+.menu{
+  display:flex;
+  align-items:center;
+  gap:26px;
+}
+
+.menu a{
+  text-decoration:none;
+  color:rgba(255,255,255,.72);
+  font-size:14px;
+  font-weight:600;
+  transition:.3s ease;
+}
+
+.menu a:hover{
+  color:var(--gold);
+}
+
+.nav-btn{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000 !important;
+  padding:10px 22px;
+  border-radius:999px;
+  font-weight:800 !important;
+  box-shadow:var(--shadow-gold);
+}
+
+/* =========================================================
+   PAGE LAYOUT
+========================================================= */
+
+.page-wrap{
+  display:flex;
+  min-height:100vh;
+  padding-top:82px;
+}
+
+/* =========================================================
+   LEFT SIDE
+========================================================= */
+
+.hero-side{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(rgba(0,0,0,.72),rgba(0,0,0,.82)),
+    url('https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1600&auto=format&fit=crop') center/cover;
+  display:flex;
+  align-items:center;
+  padding:70px;
+}
+
+.hero-side::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at top left, rgba(245,200,66,.12), transparent 30%);
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:620px;
+  animation:fadeUp 1s ease;
+}
+
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 18px;
+  border-radius:999px;
+  border:1px solid rgba(255,215,0,.15);
+  background:rgba(255,255,255,.04);
+  color:var(--gold);
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:26px;
+  backdrop-filter:blur(10px);
+}
+
+.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:68px;
+  line-height:1.05;
+  font-weight:800;
+  margin-bottom:26px;
+}
+
+.hero-title span{
+  color:var(--gold);
+}
+
+.hero-text{
+  color:rgba(255,255,255,.72);
+  font-size:18px;
+  line-height:1.9;
+  margin-bottom:36px;
+  max-width:560px;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+  margin-bottom:42px;
+}
+
+.hero-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,215,0,.08);
+  border-radius:22px;
+  padding:20px;
+  backdrop-filter:blur(14px);
+  transition:.35s ease;
+}
+
+.hero-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(255,215,0,.25);
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+}
+
+.hero-icon{
+  width:54px;
+  height:54px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(245,200,66,.12);
+  font-size:24px;
+  margin-bottom:16px;
+  animation:float 4s ease-in-out infinite;
+}
+
+.hero-card h4{
+  font-size:17px;
+  margin-bottom:8px;
+}
+
+.hero-card p{
+  color:rgba(255,255,255,.58);
+  font-size:14px;
+  line-height:1.7;
+}
+
+.stats{
+  display:flex;
+  gap:40px;
+}
+
+.stat h3{
+  font-size:32px;
+  font-family:'Syne',sans-serif;
+  color:var(--gold);
+  margin-bottom:5px;
+}
+
+.stat p{
+  font-size:13px;
+  color:rgba(255,255,255,.5);
+}
+
+/* =========================================================
+   FORM SIDE
+========================================================= */
+
+.auth-side{
+  width:520px;
+  background:
+    linear-gradient(180deg,#090909,#050505);
+  border-left:1px solid rgba(255,215,0,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:50px;
+  position:relative;
+}
+
+.auth-side::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at top right, rgba(245,200,66,.07), transparent 22%);
+  pointer-events:none;
+}
+
+.auth-box{
+  width:100%;
+  max-width:430px;
+  position:relative;
+  z-index:2;
+  animation:fadeUp .8s ease;
+}
+
+.form-logo{
+  text-align:center;
+  font-family:'Syne',sans-serif;
+  font-size:30px;
+  font-weight:800;
+  margin-bottom:14px;
+  color:var(--gold);
+}
+
+.form-sub{
+  text-align:center;
+  color:rgba(255,255,255,.56);
+  font-size:15px;
+  margin-bottom:34px;
+  line-height:1.8;
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+
+.tabs{
+  display:flex;
+  background:#101010;
+  border:1px solid #1e1e1e;
+  padding:5px;
+  border-radius:999px;
+  margin-bottom:30px;
+}
+
+.tab{
+  flex:1;
+  text-align:center;
+  padding:13px;
+  border-radius:999px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.35s ease;
+  color:#777;
+}
+
+.tab.active{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-group{
+  margin-bottom:18px;
+}
+
+label{
+  display:block;
+  margin-bottom:9px;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  color:#7a7a7a;
+  font-weight:700;
+}
+
+input,
+select{
+  width:100%;
+  border:none;
+  outline:none;
+  background:#101010;
+  border:1.5px solid #1f1f1f;
+  padding:16px 18px;
+  border-radius:16px;
+  color:#fff;
+  font-size:15px;
+  font-family:'DM Sans',sans-serif;
+  transition:.3s ease;
+}
+
+input::placeholder{
+  color:#555;
+}
+
+input:focus,
+select:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 4px rgba(245,200,66,.08);
+}
+
+.role-group{
+  display:flex;
+  gap:14px;
+}
+
+.role-box{
+  flex:1;
+  padding:15px;
+  border-radius:16px;
+  border:1.5px solid #1f1f1f;
+  background:#0e0e0e;
+  text-align:center;
+  cursor:pointer;
+  transition:.3s ease;
+  color:#777;
+  font-weight:700;
+}
+
+.role-box.active{
+  border-color:var(--gold);
+  background:rgba(245,200,66,.08);
+  color:var(--gold);
+}
+
+#sellerExtra{
+  display:none;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.submit-btn{
+  width:100%;
+  border:none;
+  cursor:pointer;
+  border-radius:18px;
+  padding:17px;
+  margin-top:8px;
+  font-family:'Syne',sans-serif;
+  font-size:15px;
+  font-weight:800;
+  color:#000;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  transition:.35s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  box-shadow:var(--shadow-gold);
+}
+
+.submit-btn:hover{
+  transform:translateY(-3px);
+}
+
+.submit-btn:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.spinner{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  border:2px solid rgba(0,0,0,.2);
+  border-top:2px solid #000;
+  display:none;
+  animation:spin .8s linear infinite;
+}
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.divider{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:24px 0;
+}
+
+.divider-line{
+  flex:1;
+  height:1px;
+  background:#222;
+}
+
+.divider span{
+  font-size:12px;
+  color:#666;
+}
+
+/* =========================================================
+   GOOGLE BUTTON
+========================================================= */
+
+.google-btn{
+  width:100%;
+  padding:15px;
+  border-radius:18px;
+  border:1.5px solid #232323;
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  transition:.3s ease;
+}
+
+.google-btn:hover{
+  background:#171717;
+  border-color:#444;
+}
+
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+.msg-box{
+  display:none;
+  margin-top:18px;
+  padding:15px 18px;
+  border-radius:16px;
+  font-size:14px;
+  animation:tbFadeUp .4s ease;
+}
+
+.msg-error{
+  background:rgba(255,95,95,.1);
+  border:1px solid rgba(255,95,95,.25);
+  color:#ffb0b0;
+}
+
+.msg-success{
+  background:rgba(46,255,155,.08);
+  border:1px solid rgba(46,255,155,.2);
+  color:#9effc7;
+}
+
+.forgot-link{
+  text-align:right;
+  margin-top:-8px;
+  margin-bottom:18px;
+}
+
+.forgot-link a{
+  color:#666;
+  text-decoration:none;
+  font-size:13px;
+  transition:.3s ease;
+}
+
+.forgot-link a:hover{
+  color:var(--gold);
+}
+
+.footer-note{
+  text-align:center;
+  margin-top:28px;
+  color:#555;
+  font-size:12px;
+  line-height:1.8;
+}
+
+.footer-note a{
+  color:var(--gold);
+  text-decoration:none;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1200px){
+  .hero-title{
+    font-size:56px;
+  }
+}
+
+@media(max-width:980px){
+
+  .hero-side{
+    display:none;
+  }
+
+  .auth-side{
+    width:100%;
+    min-height:100vh;
+    border-left:none;
+    padding:40px 24px;
+  }
+
+  .top-nav{
+    padding:18px 24px;
+  }
+
+  .menu{
+    display:none;
+  }
+}
+
+@media(max-width:500px){
+
+  .form-logo{
+    font-size:26px;
+  }
+
+  .tab{
+    font-size:13px;
+    padding:12px;
+  }
+
+  .role-group{
+    flex-direction:column;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="top-nav">
+  <a href="index.html" class="logo">TRUSTBRIDGE</a>
+
+  <div class="menu">
+    <a href="index.html">Home</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="escrow.html">Escrow</a>
+    <a href="support.html">Support</a>
+    <a href="login.html" class="nav-btn">Login</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- LEFT HERO -->
+  <section class="hero-side">
+
+    <div class="hero-content">
+
+      <div class="hero-badge">
+        🔒 Enterprise Escrow Protection
+      </div>
+
+      <h1 class="hero-title">
+        Secure Global <span>Trading</span> For Modern Commerce
+      </h1>
+
+      <p class="hero-text">
+        TrustBridge protects buyers and sellers with intelligent escrow,
+        verified merchants, fraud detection, and instant dispute resolution.
+      </p>
+
+      <div class="hero-grid">
+
+        <div class="hero-card">
+          <div class="hero-icon">🛡️</div>
+          <h4>Escrow Security</h4>
+          <p>
+            Payments stay protected until both parties confirm satisfaction.
+          </p>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-icon">⚡</div>
+          <h4>Fast Transactions</h4>
+          <p>
+            Real-time secure transfers with modern transaction monitoring.
+          </p>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-icon">🌍</div>
+          <h4>Worldwide Access</h4>
+          <p>
+            Trade confidently with verified users from over 190 countries.
+          </p>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-icon">📈</div>
+          <h4>Seller Growth</h4>
+          <p>
+            Professional dashboards and analytics built for scaling businesses.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <h3>14K+</h3>
+          <p>Verified Sellers</p>
+        </div>
+
+        <div class="stat">
+          <h3>$127M</h3>
+          <p>Protected Volume</p>
+        </div>
+
+        <div class="stat">
+          <h3>190+</h3>
+          <p>Countries</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- AUTH SIDE -->
+  <section class="auth-side">
+
+    <div class="auth-box">
+
+      <div class="form-logo">
+        ⚡ TrustBridge
+      </div>
+
+      <div class="form-sub">
+        Access your secure marketplace account and manage protected global transactions.
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <div class="tab active" id="loginTab" onclick="switchTab('login')">
+          Login
+        </div>
+
+        <div class="tab" id="signupTab" onclick="switchTab('signup')">
+          Sign Up
+        </div>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="loginForm">
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••">
+        </div>
+
+        <div class="forgot-link">
+          <a href="#" id="forgotLink">Forgot password?</a>
+        </div>
+
+        <button class="submit-btn" id="loginBtn">
+          <div class="spinner" id="loginSpinner"></div>
+          <span id="loginBtnText">Login to TrustBridge →</span>
+        </button>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <span>OR CONTINUE WITH</span>
+          <div class="divider-line"></div>
+        </div>
+
+        <button class="google-btn" id="googleLoginBtn">
+          Continue with Google
+        </button>
+
+        <div id="loginMsg" class="msg-box msg-error"></div>
+
+      </div>
+
+      <!-- SIGNUP -->
+      <div id="signupForm" style="display:none;">
+
+        <div class="form-group">
+          <label>I am a...</label>
+
+          <div class="role-group">
+
+            <div class="role-box active"
+                 id="roleBuyer"
+                 onclick="setRole('buyer')">
+              🛒 Buyer
+            </div>
+
+            <div class="role-box"
+                 id="roleSeller"
+                 onclick="setRole('seller')">
+              📦 Seller
+            </div>
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="signupName" placeholder="John Doe">
+        </div>
+
+        <div id="sellerExtra">
+
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" id="businessName" placeholder="My Business Ltd">
+          </div>
+
+          <div class="form-group">
+            <label>Business Category</label>
+
+            <select id="businessCategory">
+              <option value="">Select category...</option>
+              <option>Electronics</option>
+              <option>Fashion & Apparel</option>
+              <option>Luxury Goods</option>
+              <option>Vehicles & Motors</option>
+              <option>Industrial & Commercial</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="signupEmail" placeholder="you@example.com">
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="signupPhone" placeholder="+250 7XX XXX XXX">
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signupPassword" placeholder="Minimum 6 characters">
+        </div>
+
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" id="signupConfirm" placeholder="Repeat password">
+        </div>
+
+        <button class="submit-btn" id="signupBtn">
+          <div class="spinner" id="signupSpinner"></div>
+          <span id="signupBtnText">Create Account →</span>
+        </button>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <span>OR CONTINUE WITH</span>
+          <div class="divider-line"></div>
+        </div>
+
+        <button class="google-btn" id="googleSignupBtn">
+          Sign Up with Google
+        </button>
+
+        <div id="signupMsg" class="msg-box"></div>
+
+      </div>
+
+      <div class="footer-note">
+        By continuing you agree to our
+        <a href="#">Terms</a> &
+        <a href="#">Privacy Policy</a>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<!-- ======================================================
+     FIREBASE + AUTH LOGIC
+====================================================== -->
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  sendPasswordResetEmail,
+  updateProfile
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXXXXXX",
+  appId: "XXXXXXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let selectedRole = 'buyer';
+
+/* =========================================================
+   TAB SWITCH
+========================================================= */
+
+window.switchTab = function(tab){
+
+  document.getElementById('loginForm').style.display =
+    tab === 'login' ? 'block' : 'none';
+
+  document.getElementById('signupForm').style.display =
+    tab === 'signup' ? 'block' : 'none';
+
+  document.getElementById('loginTab')
+    .classList.toggle('active',tab === 'login');
+
+  document.getElementById('signupTab')
+    .classList.toggle('active',tab === 'signup');
+
+  clearMessages();
+};
+
+/* =========================================================
+   ROLE SWITCH
+========================================================= */
+
+window.setRole = function(role){
+
+  selectedRole = role;
+
+  document.getElementById('roleBuyer')
+    .classList.toggle('active', role === 'buyer');
+
+  document.getElementById('roleSeller')
+    .classList.toggle('active', role === 'seller');
+
+  document.getElementById('sellerExtra').style.display =
+    role === 'seller' ? 'block' : 'none';
+};
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function clearMessages(){
+
+  ['loginMsg','signupMsg'].forEach(id => {
+
+    const el = document.getElementById(id);
+
+    el.style.display = 'none';
+    el.textContent = '';
+
+  });
+
+}
+
+function showMsg(id,msg,type='error'){
+
+  const el = document.getElementById(id);
+
+  el.textContent = msg;
+  el.className = `msg-box msg-${type}`;
+  el.style.display = 'block';
+
+}
+
+function setLoading(btnId,spinnerId,textId,loading){
+
+  document.getElementById(btnId).disabled = loading;
+
+  document.getElementById(spinnerId).style.display =
+    loading ? 'block' : 'none';
+
+  document.getElementById(textId).style.display =
+    loading ? 'none' : 'inline';
+
+}
+
+function friendlyError(code){
+
+  const map = {
+
+    'auth/email-already-in-use':
+      'Email already exists.',
+
+    'auth/invalid-email':
+      'Invalid email address.',
+
+    'auth/weak-password':
+      'Password should be at least 6 characters.',
+
+    'auth/user-not-found':
+      'User not found.',
+
+    'auth/wrong-password':
+      'Wrong password.',
+
+    'auth/network-request-failed':
+      'Check your internet connection.',
+
+    'auth/popup-closed-by-user':
+      'Google popup closed.'
+  };
+
+  return map[code] || 'Something went wrong.';
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+document.getElementById('loginBtn')
+.addEventListener('click', async ()=>{
+
+  const email =
+    document.getElementById('loginEmail').value.trim();
+
+  const password =
+    document.getElementById('loginPassword').value;
+
+  if(!email || !password){
+
+    showMsg('loginMsg','Please enter email and password.');
+    return;
+  }
+
+  setLoading(
+    'loginBtn',
+    'loginSpinner',
+    'loginBtnText',
+    true
+  );
+
+  try{
+
+    const cred =
+      await signInWithEmailAndPassword(auth,email,password);
+
+    const snap =
+      await getDoc(doc(db,'users',cred.user.uid));
+
+    const user = snap.data();
+
+    showMsg(
+      'loginMsg',
+      `Welcome back ${user.name || ''}! Redirecting...`,
+      'success'
+    );
+
+    setTimeout(()=>{
+
+      window.location.href =
+        user.role === 'seller'
+        ? 'dashboard.html'
+        : 'marketplace.html';
+
+    },1200);
+
+  }catch(err){
+
+    showMsg('loginMsg',friendlyError(err.code));
+
+  }finally{
+
+    setLoading(
+      'loginBtn',
+      'loginSpinner',
+      'loginBtnText',
+      false
+    );
+  }
+
+});
+
+/* =========================================================
+   SIGN UP
+========================================================= */
+
+document.getElementById('signupBtn')
+.addEventListener('click', async ()=>{
+
+  const name =
+    document.getElementById('signupName').value.trim();
+
+  const email =
+    document.getElementById('signupEmail').value.trim();
+
+  const phone =
+    document.getElementById('signupPhone').value.trim();
+
+  const password =
+    document.getElementById('signupPassword').value;
+
+  const confirm =
+    document.getElementById('signupConfirm').value;
+
+  const businessName =
+    document.getElementById('businessName').value.trim();
+
+  const category =
+    document.getElementById('businessCategory').value;
+
+  if(!name || !email || !password || !confirm){
+
+    showMsg('signupMsg','Fill all required fields.');
+    return;
+  }
+
+  if(password !== confirm){
+
+    showMsg('signupMsg','Passwords do not match.');
+    return;
+  }
+
+  if(selectedRole === 'seller' && !businessName){
+
+    showMsg('signupMsg','Enter business name.');
+    return;
+  }
+
+  setLoading(
+    'signupBtn',
+    'signupSpinner',
+    'signupBtnText',
+    true
+  );
+
+  try{
+
+    const cred =
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    await updateProfile(cred.user,{
+      displayName:name
+    });
+
+    const userData = {
+
+      uid:cred.user.uid,
+      name,
+      email,
+      phone,
+      role:selectedRole,
+
+      businessName:
+        selectedRole === 'seller'
+        ? businessName
+        : null,
+
+      category:
+        selectedRole === 'seller'
+        ? category
+        : null,
+
+      createdAt:serverTimestamp(),
+
+      status:
+        selectedRole === 'seller'
+        ? 'pending'
+        : 'active',
+
+      verified:false
+    };
+
+    await setDoc(
+      doc(db,'users',cred.user.uid),
+      userData
+    );
+
+    showMsg(
+      'signupMsg',
+      'Account created successfully!',
+      'success'
+    );
+
+    setTimeout(()=>{
+
+      window.location.href =
+        selectedRole === 'seller'
+        ? 'dashboard.html'
+        : 'marketplace.html';
+
+    },1600);
+
+  }catch(err){
+
+    showMsg('signupMsg',friendlyError(err.code));
+
+  }finally{
+
+    setLoading(
+      'signupBtn',
+      'signupSpinner',
+      'signupBtnText',
+      false
+    );
+
+  }
+
+});
+
+/* =========================================================
+   GOOGLE AUTH
+========================================================= */
+
+async function googleSignIn(defaultRole='buyer'){
+
+  try{
+
+    const provider = new GoogleAuthProvider();
+
+    const cred =
+      await signInWithPopup(auth,provider);
+
+    const ref = doc(db,'users',cred.user.uid);
+
+    const snap = await getDoc(ref);
+
+    if(!snap.exists()){
+
+      await setDoc(ref,{
+
+        uid:cred.user.uid,
+        name:cred.user.displayName,
+        email:cred.user.email,
+        avatar:cred.user.photoURL,
+        role:defaultRole,
+        createdAt:serverTimestamp(),
+        verified:false,
+        status:'active'
+
+      });
+
+    }
+
+    const role =
+      snap.exists()
+      ? snap.data().role
+      : defaultRole;
+
+    window.location.href =
+      role === 'seller'
+      ? 'dashboard.html'
+      : 'marketplace.html';
+
+  }catch(err){
+
+    showMsg('loginMsg',friendlyError(err.code));
+
+  }
+
+}
+
+document.getElementById('googleLoginBtn')
+.addEventListener('click',()=>googleSignIn('buyer'));
+
+document.getElementById('googleSignupBtn')
+.addEventListener('click',()=>googleSignIn(selectedRole));
+
+/* =========================================================
+   FORGOT PASSWORD
+========================================================= */
+
+document.getElementById('forgotLink')
+.addEventListener('click', async (e)=>{
+
+  e.preventDefault();
+
+  const email =
+    document.getElementById('loginEmail').value.trim();
+
+  if(!email){
+
+    showMsg(
+      'loginMsg',
+      'Enter your email first.'
+    );
+
+    return;
+  }
+
+  try{
+
+    await sendPasswordResetEmail(auth,email);
+
+    showMsg(
+      'loginMsg',
+      'Password reset email sent.',
+      'success'
+    );
+
+  }catch(err){
+
+    showMsg(
+      'loginMsg',
+      friendlyError(err.code)
+    );
+
+  }
+
+});
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+document.getElementById('loginPassword')
+.addEventListener('keydown',e=>{
+
+  if(e.key === 'Enter'){
+
+    document.getElementById('loginBtn').click();
+
+  }
+
+});
+
+document.getElementById('signupConfirm')
+.addEventListener('keydown',e=>{
+
+  if(e.key === 'Enter'){
+
+    document.getElementById('signupBtn').click();
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustBridge — Become a Seller</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --gold:#FFD700;
+    --gold2:#ffb300;
+    --black:#050505;
+    --card:#111111;
+    --line:rgba(255,255,255,.08);
+    --text:#b5b5b5;
+    --white:#fff;
+}
+
+body{
+    font-family:'DM Sans',sans-serif;
+    background:#000;
+    color:#fff;
+    overflow-x:hidden;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+::-webkit-scrollbar{
+    width:8px;
+}
+::-webkit-scrollbar-thumb{
+    background:linear-gradient(var(--gold),var(--gold2));
+    border-radius:20px;
+}
+::-webkit-scrollbar-track{
+    background:#111;
+}
+
+/* NAVBAR */
+#navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 7%;
+    background:rgba(0,0,0,.92);
+    backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.logo{
+    text-decoration:none;
+    font-size:1.8rem;
+    font-weight:900;
+    color:#fff;
+    font-family:'Playfair Display',serif;
+    letter-spacing:1px;
+}
+
+.logo span{
+    color:var(--gold);
+}
+
+#navMenu{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    list-style:none;
+}
+
+#navMenu li a{
+    text-decoration:none;
+    color:#fff;
+    font-size:15px;
+    position:relative;
+    transition:.3s;
+}
+
+#navMenu li a::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-8px;
+    width:0%;
+    height:2px;
+    background:var(--gold);
+    transition:.3s;
+}
+
+#navMenu li a:hover,
+#navMenu li a.active{
+    color:var(--gold);
+}
+
+#navMenu li a:hover::after,
+#navMenu li a.active::after{
+    width:100%;
+}
+
+.signup-btn{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#000 !important;
+    padding:12px 24px;
+    border-radius:40px;
+    font-weight:700;
+    box-shadow:0 10px 25px rgba(255,215,0,.2);
+}
+
+.signup-btn::after{
+    display:none;
+}
+
+.signup-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* MOBILE MENU */
+.hamburger{
+    display:none;
+    font-size:1.8rem;
+    cursor:pointer;
+    color:#fff;
+}
+
+/* HERO */
+.hero{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:140px 8% 100px;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-bg{
+    position:absolute;
+    inset:0;
+    background:
+    linear-gradient(rgba(0,0,0,.78),rgba(0,0,0,.88)),
+    url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1800&q=80');
+    background-size:cover;
+    background-position:center;
+}
+
+.hero::before{
+    content:'';
+    position:absolute;
+    width:700px;
+    height:700px;
+    right:-250px;
+    top:-200px;
+    background:radial-gradient(circle,rgba(255,215,0,.14),transparent 70%);
+    animation:float 8s ease-in-out infinite;
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    max-width:720px;
+}
+
+.hero-tag{
+    display:inline-block;
+    margin-bottom:26px;
+    padding:8px 18px;
+    border:1px solid rgba(255,215,0,.25);
+    border-radius:40px;
+    color:var(--gold);
+    font-size:12px;
+    font-family:'Space Mono',monospace;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+.hero h1{
+    font-size:clamp(48px,7vw,82px);
+    line-height:1.05;
+    margin-bottom:20px;
+    font-family:'Playfair Display',serif;
+}
+
+.hero h1 span{
+    color:var(--gold);
+}
+
+.hero p{
+    color:#d0d0d0;
+    line-height:1.8;
+    max-width:620px;
+    margin-bottom:40px;
+    font-size:18px;
+}
+
+.hero-btns{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:16px 34px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:700;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition:.3s;
+    border:none;
+    cursor:pointer;
+}
+
+.btn-gold{
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#000;
+    box-shadow:0 12px 30px rgba(255,215,0,.2);
+}
+
+.btn-gold:hover{
+    transform:translateY(-4px);
+}
+
+.btn-dark{
+    border:1px solid rgba(255,255,255,.18);
+    color:#fff;
+    background:rgba(255,255,255,.03);
+}
+
+.btn-dark:hover{
+    border-color:var(--gold);
+    color:var(--gold);
+}
+
+.hero-metrics{
+    margin-top:60px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:50px;
+}
+
+.metric h3{
+    font-size:40px;
+    color:var(--gold);
+    font-family:'Playfair Display',serif;
+}
+
+.metric p{
+    margin-top:8px;
+    font-size:14px;
+    color:#999;
+}
+
+/* SECTIONS */
+.section{
+    padding:100px 8%;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-title h2{
+    font-size:clamp(34px,5vw,56px);
+    font-family:'Playfair Display',serif;
+    margin-bottom:14px;
+}
+
+.section-title h2 span{
+    color:var(--gold);
+}
+
+.section-title p{
+    max-width:650px;
+    margin:auto;
+    color:#aaa;
+    line-height:1.8;
+}
+
+/* STEPS */
+.steps-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:28px;
+}
+
+.step-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:36px;
+    transition:.35s;
+    position:relative;
+    overflow:hidden;
+}
+
+.step-card:hover{
+    transform:translateY(-10px);
+    border-color:rgba(255,215,0,.35);
+}
+
+.step-number{
+    font-size:72px;
+    color:rgba(255,215,0,.08);
+    font-family:'Playfair Display',serif;
+    margin-bottom:10px;
+}
+
+.step-icon{
+    font-size:34px;
+    color:var(--gold);
+    margin-bottom:16px;
+}
+
+.step-card h3{
+    font-size:24px;
+    margin-bottom:14px;
+    font-family:'Playfair Display',serif;
+}
+
+.step-card p{
+    color:#aaa;
+    line-height:1.8;
+}
+
+/* BENEFITS */
+.benefits{
+    background:#050505;
+}
+
+.benefits-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+}
+
+.benefit-card{
+    background:#111;
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:32px;
+    transition:.35s;
+}
+
+.benefit-card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(255,215,0,.3);
+}
+
+.benefit-icon{
+    font-size:34px;
+    color:var(--gold);
+    margin-bottom:18px;
+}
+
+.benefit-card h4{
+    font-size:22px;
+    margin-bottom:12px;
+    font-family:'Playfair Display',serif;
+}
+
+.benefit-card p{
+    color:#aaa;
+    line-height:1.8;
+}
+
+/* TABLE */
+.fee-table{
+    margin-top:40px;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid var(--line);
+}
+
+.fee-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    padding:20px 30px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.fee-row:last-child{
+    border-bottom:none;
+}
+
+.fee-row:first-child{
+    background:#0c0c0c;
+}
+
+.fee-row span{
+    color:#ddd;
+}
+
+.fee-title{
+    color:var(--gold);
+    font-weight:700;
+}
+
+/* CTA */
+.cta{
+    padding:120px 8%;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    background:
+    linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.88)),
+    url('https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1600&q=80');
+    background-size:cover;
+    background-position:center;
+}
+
+.cta::before{
+    content:'';
+    position:absolute;
+    width:600px;
+    height:600px;
+    background:radial-gradient(circle,rgba(255,215,0,.12),transparent 70%);
+    left:-200px;
+    bottom:-200px;
+}
+
+.cta-content{
+    position:relative;
+    z-index:2;
+}
+
+.cta h2{
+    font-size:clamp(38px,5vw,64px);
+    margin-bottom:20px;
+    font-family:'Playfair Display',serif;
+}
+
+.cta h2 span{
+    color:var(--gold);
+}
+
+.cta p{
+    color:#ccc;
+    max-width:650px;
+    margin:0 auto 40px;
+    line-height:1.8;
+}
+
+/* FOOTER */
+footer{
+    padding:35px;
+    text-align:center;
+    background:#050505;
+    color:#888;
+    border-top:1px solid rgba(255,255,255,.05);
+}
+
+/* REVEAL */
+.reveal{
+    opacity:0;
+    transform:translateY(60px);
+    transition:.8s;
+}
+
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* ANIMATION */
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-20px);
+    }
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+    .hamburger{
+        display:block;
+    }
+
+    #navMenu{
+        position:fixed;
+        top:85px;
+        right:-100%;
+        width:280px;
+        height:calc(100vh - 85px);
+        background:#111827;
+        flex-direction:column;
+        padding-top:40px;
+        transition:.4s;
+    }
+
+    #navMenu.active{
+        right:0;
+    }
+
+    .hero{
+        padding-top:150px;
+    }
+
+    .hero-metrics{
+        gap:24px;
+    }
+
+    .fee-row{
+        grid-template-columns:1fr;
+        gap:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+
+    <a href="index.html" class="logo">
+        TRUST<span>BRIDGE</span>
+    </a>
+
+    <div class="hamburger" id="hamburger">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <ul id="navMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="marketplace.html">Marketplace</a></li>
+        <li><a href="escrow.html">Escrow</a></li>
+        <li><a href="sellers.html" class="active">Sellers</a></li>
+        <li><a href="support.html">Support</a></li>
+        <li>
+            <a href="login.html" class="signup-btn">
+                <i class="fas fa-user-plus"></i>
+                Get Started
+            </a>
+        </li>
+    </ul>
+
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+    <div class="hero-bg"></div>
+
+    <div class="hero-content">
+
+        <div class="hero-tag">
+            Verified Seller Program
+        </div>
+
+        <h1>
+            Sell Globally With <span>Confidence</span>
+        </h1>
+
+        <p>
+            Join thousands of verified merchants using TrustBridge escrow protection to safely grow their business across 190+ countries.
+        </p>
+
+        <div class="hero-btns">
+            <a href="login.html" class="btn btn-gold">
+                <i class="fas fa-store"></i>
+                Become Seller
+            </a>
+
+            <a href="support.html" class="btn btn-dark">
+                <i class="fas fa-headset"></i>
+                Talk To Support
+            </a>
+        </div>
+
+        <div class="hero-metrics">
+
+            <div class="metric">
+                <h3>14K+</h3>
+                <p>Verified Sellers</p>
+            </div>
+
+            <div class="metric">
+                <h3>$127M</h3>
+                <p>Protected Transactions</p>
+            </div>
+
+            <div class="metric">
+                <h3>190+</h3>
+                <p>Countries Reached</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- STEPS -->
+<section class="section reveal">
+
+    <div class="section-title">
+        <h2>How To Start <span>Selling</span></h2>
+        <p>
+            Simple onboarding designed to help you launch quickly and securely.
+        </p>
+    </div>
+
+    <div class="steps-grid">
+
+        <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h3>Create Account</h3>
+            <p>
+                Register your business profile and provide basic seller information.
+            </p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-icon">
+                <i class="fas fa-id-card"></i>
+            </div>
+            <h3>Verify Identity</h3>
+            <p>
+                Upload documents for KYC review and earn your verified badge.
+            </p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-icon">
+                <i class="fas fa-globe"></i>
+            </div>
+            <h3>Start Selling</h3>
+            <p>
+                Publish products, connect with buyers, and trade securely worldwide.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- BENEFITS -->
+<section class="section benefits reveal">
+
+    <div class="section-title">
+        <h2>Seller <span>Benefits</span></h2>
+        <p>
+            Everything you need to build trust, increase sales, and scale internationally.
+        </p>
+    </div>
+
+    <div class="benefits-grid">
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h4>Escrow Protection</h4>
+            <p>
+                Every transaction is protected to ensure secure payments and safe delivery.
+            </p>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h4>Fast Withdrawals</h4>
+            <p>
+                Receive your earnings quickly through multiple trusted payout methods.
+            </p>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h4>Analytics Dashboard</h4>
+            <p>
+                Track sales, monitor performance, and grow your business intelligently.
+            </p>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <h4>Buyer Messaging</h4>
+            <p>
+                Communicate directly with buyers through secure in-platform messaging.
+            </p>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-scale-balanced"></i>
+            </div>
+            <h4>Dispute Resolution</h4>
+            <p>
+                Professional mediation protects both buyers and sellers fairly.
+            </p>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <i class="fas fa-earth-africa"></i>
+            </div>
+            <h4>Global Reach</h4>
+            <p>
+                Access international buyers in over 190 countries with ease.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- FEES -->
+<section class="section reveal">
+
+    <div class="section-title">
+        <h2>Transparent <span>Pricing</span></h2>
+        <p>
+            No hidden fees. No monthly subscriptions. Only simple escrow pricing.
+        </p>
+    </div>
+
+    <div class="fee-table">
+
+        <div class="fee-row">
+            <span class="fee-title">Fee Type</span>
+            <span class="fee-title">Amount</span>
+            <span class="fee-title">Description</span>
+        </div>
+
+        <div class="fee-row">
+            <span>Escrow Fee</span>
+            <span>2.5%</span>
+            <span>Split between buyer and seller</span>
+        </div>
+
+        <div class="fee-row">
+            <span>Listing Fee</span>
+            <span>$0</span>
+            <span>Unlimited product listings</span>
+        </div>
+
+        <div class="fee-row">
+            <span>Withdrawal Fee</span>
+            <span>Free</span>
+            <span>Bank, PayPal, USDT & M-Pesa</span>
+        </div>
+
+        <div class="fee-row">
+            <span>Monthly Fee</span>
+            <span>$0</span>
+            <span>No subscriptions required</span>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CTA -->
+<section class="cta reveal">
+
+    <div class="cta-content">
+
+        <h2>
+            Ready To Scale Your <span>Business?</span>
+        </h2>
+
+        <p>
+            Join the TrustBridge seller ecosystem and grow your global business with secure escrow technology.
+        </p>
+
+        <div class="hero-btns" style="justify-content:center;">
+
+            <a href="login.html" class="btn btn-gold">
+                <i class="fas fa-store"></i>
+                Create Seller Account
+            </a>
+
+            <a href="support.html" class="btn btn-dark">
+                <i class="fas fa-headset"></i>
+                Contact Support
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer>
+    © 2026 TrustBridge Premium Marketplace — Seller Program
+</footer>
+
+<script>
+
+/* MOBILE MENU */
+const hamburger = document.getElementById("hamburger");
+const navMenu = document.getElementById("navMenu");
+
+hamburger.addEventListener("click", () => {
+
+    navMenu.classList.toggle("active");
+
+    const icon = hamburger.querySelector("i");
+
+    if(navMenu.classList.contains("active")){
+        icon.classList.remove("fa-bars");
+        icon.classList.add("fa-times");
+    }else{
+        icon.classList.remove("fa-times");
+        icon.classList.add("fa-bars");
+    }
+});
+
+/* REVEAL ANIMATION */
+function revealElements(){
+
+    const reveals = document.querySelectorAll(".reveal");
+
+    reveals.forEach(el => {
+
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+
+        if(elementTop < windowHeight - 100){
+            el.classList.add("active");
+        }
+
+    });
+
+}
+
+window.addEventListener("scroll", revealElements);
+
+revealElements();
+
+</script>
+
+</body>
+</html>

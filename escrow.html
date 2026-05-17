@@ -1,0 +1,1009 @@
+<!-- =========================
+TRUSTBRIDGE ESCROW PAGE — MODERN PREMIUM VERSION
+Fully Improved UI + Fixed Functions
+========================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TrustBridge — Secure Escrow</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+:root{
+--gold:#FFD54A;
+--gold2:#FFB300;
+--bg:#060606;
+--card:rgba(255,255,255,.05);
+--line:rgba(255,255,255,.08);
+--text:#B7B7B7;
+--success:#2EFF9B;
+--danger:#FF6767;
+}
+
+body{
+font-family:'DM Sans',sans-serif;
+background:
+linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.92)),
+url('https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1800&q=80');
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+color:white;
+overflow-x:hidden;
+}
+
+::-webkit-scrollbar{
+width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+background:var(--gold);
+border-radius:40px;
+}
+
+/* NAV */
+
+nav{
+position:sticky;
+top:0;
+z-index:999;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 6%;
+background:rgba(0,0,0,.72);
+backdrop-filter:blur(16px);
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.logo{
+font-family:'Syne',sans-serif;
+font-size:24px;
+font-weight:800;
+text-decoration:none;
+color:white;
+letter-spacing:1px;
+}
+
+.logo span{
+color:var(--gold);
+}
+
+.menu{
+display:flex;
+gap:16px;
+align-items:center;
+flex-wrap:wrap;
+}
+
+.menu a{
+text-decoration:none;
+color:#cfcfcf;
+font-size:14px;
+font-weight:700;
+padding:12px 18px;
+border-radius:40px;
+transition:.3s;
+}
+
+.menu a:hover,
+.menu a.active{
+background:linear-gradient(135deg,var(--gold),var(--gold2));
+color:#000;
+transform:translateY(-2px);
+}
+
+.hero{
+padding:100px 8% 70px;
+text-align:center;
+position:relative;
+}
+
+.hero::before{
+content:'';
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at top right, rgba(255,213,74,.16), transparent 35%);
+}
+
+.hero h1{
+font-family:'Syne',sans-serif;
+font-size:clamp(40px,6vw,74px);
+line-height:1.05;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+}
+
+.hero h1 span{
+color:var(--gold);
+}
+
+.hero p{
+max-width:720px;
+margin:auto;
+font-size:18px;
+line-height:1.8;
+color:#d5d5d5;
+position:relative;
+z-index:2;
+}
+
+.hero-stats{
+display:flex;
+justify-content:center;
+gap:26px;
+flex-wrap:wrap;
+margin-top:42px;
+position:relative;
+z-index:2;
+}
+
+.stat{
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.08);
+padding:20px 28px;
+border-radius:22px;
+backdrop-filter:blur(10px);
+min-width:180px;
+}
+
+.stat h3{
+font-family:'Syne',sans-serif;
+font-size:32px;
+color:var(--gold);
+margin-bottom:4px;
+}
+
+.stat p{
+font-size:13px;
+color:#aaa;
+}
+
+/* CONTENT */
+
+.container{
+max-width:1300px;
+margin:auto;
+padding:0 6% 80px;
+}
+
+.top-actions{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:16px;
+margin-bottom:30px;
+flex-wrap:wrap;
+}
+
+.search-box{
+flex:1;
+min-width:260px;
+position:relative;
+}
+
+.search-box input{
+width:100%;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+padding:15px 18px 15px 50px;
+border-radius:18px;
+color:white;
+font-size:14px;
+outline:none;
+}
+
+.search-box i{
+position:absolute;
+left:18px;
+top:50%;
+transform:translateY(-50%);
+color:#aaa;
+}
+
+.add-btn{
+background:linear-gradient(135deg,var(--gold),var(--gold2));
+border:none;
+padding:15px 28px;
+border-radius:18px;
+font-weight:800;
+cursor:pointer;
+font-size:14px;
+transition:.3s;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.add-btn:hover{
+transform:translateY(-3px);
+box-shadow:0 14px 28px rgba(255,213,74,.22);
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+gap:24px;
+}
+
+.contract-card{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+border-radius:28px;
+overflow:hidden;
+backdrop-filter:blur(18px);
+transition:.35s;
+animation:fadeUp .7s ease;
+}
+
+.contract-card:hover{
+transform:translateY(-8px);
+border-color:rgba(255,213,74,.25);
+box-shadow:0 20px 38px rgba(0,0,0,.35);
+}
+
+.card-top{
+padding:26px;
+border-bottom:1px solid rgba(255,255,255,.06);
+display:flex;
+justify-content:space-between;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.contract-id{
+font-size:12px;
+letter-spacing:1px;
+color:#aaa;
+margin-bottom:8px;
+}
+
+.contract-title{
+font-family:'Syne',sans-serif;
+font-size:24px;
+font-weight:700;
+}
+
+.badge{
+padding:10px 18px;
+border-radius:40px;
+font-size:12px;
+font-weight:800;
+height:fit-content;
+}
+
+.pending{
+background:rgba(255,213,74,.12);
+color:var(--gold);
+}
+
+.shipped{
+background:rgba(61,164,255,.12);
+color:#58b0ff;
+}
+
+.completed{
+background:rgba(46,255,155,.12);
+color:var(--success);
+}
+
+.disputed{
+background:rgba(255,80,80,.12);
+color:var(--danger);
+}
+
+.card-body{
+padding:26px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+gap:18px;
+margin-bottom:24px;
+}
+
+.field label{
+display:block;
+font-size:11px;
+text-transform:uppercase;
+color:#999;
+margin-bottom:6px;
+}
+
+.value{
+font-size:18px;
+font-weight:700;
+}
+
+.gold{
+color:var(--gold);
+}
+
+.timeline{
+border-top:1px solid rgba(255,255,255,.06);
+padding-top:22px;
+}
+
+.timeline h4{
+font-size:12px;
+color:#aaa;
+margin-bottom:18px;
+text-transform:uppercase;
+letter-spacing:1px;
+}
+
+.step{
+display:flex;
+gap:14px;
+margin-bottom:18px;
+}
+
+.dot{
+width:14px;
+height:14px;
+border-radius:50%;
+margin-top:5px;
+flex-shrink:0;
+}
+
+.dot.done{
+background:var(--success);
+}
+
+.dot.active{
+background:var(--gold);
+box-shadow:0 0 0 5px rgba(255,213,74,.18);
+}
+
+.step-title{
+font-weight:700;
+}
+
+.step-time{
+font-size:13px;
+color:#aaa;
+margin-top:4px;
+}
+
+.actions{
+padding:24px;
+border-top:1px solid rgba(255,255,255,.06);
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.btn{
+border:none;
+padding:14px 18px;
+border-radius:16px;
+cursor:pointer;
+font-weight:800;
+font-size:13px;
+transition:.3s;
+}
+
+.btn-primary{
+background:linear-gradient(135deg,var(--gold),var(--gold2));
+color:#000;
+}
+
+.btn-primary:hover{
+transform:translateY(-2px);
+}
+
+.btn-danger{
+background:rgba(255,80,80,.12);
+border:1px solid rgba(255,80,80,.22);
+color:var(--danger);
+}
+
+.btn-secondary{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
+color:#ddd;
+}
+
+/* MODAL */
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+backdrop-filter:blur(10px);
+display:flex;
+justify-content:center;
+align-items:center;
+visibility:hidden;
+opacity:0;
+transition:.3s;
+z-index:5000;
+padding:20px;
+}
+
+.modal.open{
+visibility:visible;
+opacity:1;
+}
+
+.modal-box{
+background:#0f0f0f;
+border:1px solid rgba(255,255,255,.08);
+width:100%;
+max-width:520px;
+border-radius:30px;
+padding:30px;
+}
+
+.modal-box h2{
+font-family:'Syne',sans-serif;
+margin-bottom:24px;
+font-size:30px;
+}
+
+.form-group{
+margin-bottom:16px;
+}
+
+.form-group label{
+display:block;
+font-size:12px;
+margin-bottom:8px;
+color:#aaa;
+}
+
+.form-group input,
+.form-group textarea{
+width:100%;
+background:#161616;
+border:1px solid rgba(255,255,255,.08);
+padding:14px 16px;
+border-radius:16px;
+color:white;
+outline:none;
+font-size:14px;
+}
+
+.form-group textarea{
+resize:vertical;
+min-height:100px;
+}
+
+.modal-actions{
+display:flex;
+gap:12px;
+margin-top:18px;
+}
+
+.modal-actions button{
+flex:1;
+}
+
+/* TOAST */
+
+.toast{
+position:fixed;
+bottom:30px;
+right:30px;
+background:#161616;
+padding:16px 24px;
+border-left:5px solid var(--gold);
+border-radius:18px;
+z-index:6000;
+animation:slideIn .4s ease;
+}
+
+.empty{
+padding:80px 20px;
+text-align:center;
+color:#ccc;
+font-size:18px;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(30px);
+}
+to{
+opacity:1;
+transform:none;
+}
+}
+
+@keyframes slideIn{
+from{
+opacity:0;
+transform:translateX(50px);
+}
+to{
+opacity:1;
+transform:none;
+}
+}
+
+@media(max-width:768px){
+
+.hero{
+padding-top:70px;
+}
+
+.hero h1{
+font-size:42px;
+}
+
+.menu{
+display:none;
+}
+
+.cards{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+<a href="index.html" class="logo">Trust<span>Bridge</span></a>
+
+<div class="menu">
+<a href="index.html">Home</a>
+<a href="marketplace.html">Marketplace</a>
+<a href="escrow.html" class="active">Escrow</a>
+<a href="messages.html">Messages</a>
+<a href="dashboard.html">Dashboard</a>
+<a href="support.html">Support</a>
+</div>
+</nav>
+
+<section class="hero">
+
+<h1>Secure Global <span>Escrow</span><br>for Smart Commerce</h1>
+
+<p>
+Every transaction is protected with advanced escrow workflows,
+verified payments, delivery tracking, and real-time dispute protection.
+</p>
+
+<div class="hero-stats">
+
+<div class="stat">
+<h3>$127M+</h3>
+<p>Protected Transactions</p>
+</div>
+
+<div class="stat">
+<h3>14K+</h3>
+<p>Verified Sellers</p>
+</div>
+
+<div class="stat">
+<h3>190+</h3>
+<p>Countries Supported</p>
+</div>
+
+</div>
+
+</section>
+
+<div class="container">
+
+<div class="top-actions">
+
+<div class="search-box">
+<i class="fas fa-search"></i>
+<input type="text" id="searchInput" placeholder="Search contracts...">
+</div>
+
+<button class="add-btn" id="newContractBtn">
+<i class="fas fa-plus"></i>
+New Contract
+</button>
+
+</div>
+
+<div class="cards" id="contractsContainer">
+<div class="empty">⏳ Loading escrow contracts...</div>
+</div>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal" id="contractModal">
+
+<div class="modal-box">
+
+<h2>Create Escrow Contract</h2>
+
+<div class="form-group">
+<label>Product Name</label>
+<input type="text" id="productName" placeholder="MacBook Pro 2026">
+</div>
+
+<div class="form-group">
+<label>Quantity</label>
+<input type="number" id="quantity" value="1">
+</div>
+
+<div class="form-group">
+<label>Unit Price (USD)</label>
+<input type="number" id="unitPrice" placeholder="2500">
+</div>
+
+<div class="form-group">
+<label>Seller Name</label>
+<input type="text" id="sellerName" placeholder="TechBridge Ltd">
+</div>
+
+<div class="form-group">
+<label>Contract Details</label>
+<textarea id="contractDetails" placeholder="Describe product, shipping details, agreement terms..."></textarea>
+</div>
+
+<div class="modal-actions">
+<button class="btn btn-secondary" id="closeModalBtn">Cancel</button>
+<button class="btn btn-primary" id="createContractBtn">Create Contract</button>
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+doc,
+updateDoc,
+onSnapshot,
+query,
+orderBy,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyA0mA2YjiIfHU7soCjzSkcddAgVaFE1UMY",
+authDomain:"trustbridge-a8ab2.firebaseapp.com",
+projectId:"trustbridge-a8ab2",
+storageBucket:"trustbridge-a8ab2.appspot.com",
+messagingSenderId:"933754600933",
+appId:"1:933754600933:web:b4d5cdfd0b6adc9b11030c"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const container = document.getElementById('contractsContainer');
+
+function toast(message){
+
+const div = document.createElement('div');
+
+div.className='toast';
+div.innerHTML=`✨ ${message}`;
+
+document.body.appendChild(div);
+
+setTimeout(()=>{
+div.remove();
+},3000);
+
+}
+
+function statusClass(status){
+
+if(status==="created") return "pending";
+if(status==="shipped") return "shipped";
+if(status==="released") return "completed";
+if(status==="disputed") return "disputed";
+
+return "pending";
+
+}
+
+function statusText(status){
+
+if(status==="created") return "Awaiting Payment";
+if(status==="funded") return "Funds Secured";
+if(status==="shipped") return "Shipped";
+if(status==="released") return "Completed";
+if(status==="disputed") return "Disputed";
+
+return status;
+
+}
+
+function renderContracts(data){
+
+if(data.length===0){
+
+container.innerHTML=`<div class="empty">📭 No escrow contracts found.</div>`;
+return;
+
+}
+
+container.innerHTML=data.map(contract=>{
+
+return `
+
+<div class="contract-card">
+
+<div class="card-top">
+
+<div>
+<div class="contract-id">#${contract.id.slice(0,8)}</div>
+<div class="contract-title">${contract.productName}</div>
+</div>
+
+<div class="badge ${statusClass(contract.status)}">
+${statusText(contract.status)}
+</div>
+
+</div>
+
+<div class="card-body">
+
+<div class="grid">
+
+<div class="field">
+<label>Seller</label>
+<div class="value">${contract.sellerName}</div>
+</div>
+
+<div class="field">
+<label>Quantity</label>
+<div class="value">${contract.quantity}</div>
+</div>
+
+<div class="field">
+<label>Total</label>
+<div class="value gold">$${contract.total}</div>
+</div>
+
+</div>
+
+<div class="timeline">
+
+<h4>Contract Timeline</h4>
+
+<div class="step">
+<div class="dot done"></div>
+<div>
+<div class="step-title">Contract Created</div>
+<div class="step-time">Protected by TrustBridge</div>
+</div>
+</div>
+
+<div class="step">
+<div class="dot ${contract.status==='released'?'done':'active'}"></div>
+<div>
+<div class="step-title">${statusText(contract.status)}</div>
+<div class="step-time">${contract.details || 'Secure escrow transaction'}</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="btn btn-primary payBtn" data-id="${contract.id}">
+💳 Fund Escrow
+</button>
+
+<button class="btn btn-secondary shipBtn" data-id="${contract.id}">
+📦 Ship
+</button>
+
+<button class="btn btn-danger disputeBtn" data-id="${contract.id}">
+⚠ Dispute
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}).join('');
+
+attachEvents();
+
+}
+
+function attachEvents(){
+
+document.querySelectorAll('.payBtn').forEach(btn=>{
+
+btn.onclick=async()=>{
+
+const ref = doc(db,'escrows',btn.dataset.id);
+
+await updateDoc(ref,{
+status:'funded'
+});
+
+toast('Funds secured in escrow.');
+
+};
+
+});
+
+document.querySelectorAll('.shipBtn').forEach(btn=>{
+
+btn.onclick=async()=>{
+
+const ref = doc(db,'escrows',btn.dataset.id);
+
+await updateDoc(ref,{
+status:'shipped'
+});
+
+toast('Product marked as shipped.');
+
+};
+
+});
+
+document.querySelectorAll('.disputeBtn').forEach(btn=>{
+
+btn.onclick=async()=>{
+
+const reason = prompt('Enter dispute reason');
+
+if(!reason) return;
+
+const ref = doc(db,'escrows',btn.dataset.id);
+
+await updateDoc(ref,{
+status:'disputed',
+disputeReason:reason
+});
+
+toast('Dispute submitted.');
+
+};
+
+});
+
+}
+
+const q = query(collection(db,'escrows'),orderBy('createdAt','desc'));
+
+onSnapshot(q,snapshot=>{
+
+const data=[];
+
+snapshot.forEach(docu=>{
+
+data.push({
+id:docu.id,
+...docu.data()
+});
+
+});
+
+renderContracts(data);
+
+});
+
+const modal = document.getElementById('contractModal');
+
+document.getElementById('newContractBtn').onclick=()=>{
+
+modal.classList.add('open');
+
+};
+
+document.getElementById('closeModalBtn').onclick=()=>{
+
+modal.classList.remove('open');
+
+};
+
+window.onclick=(e)=>{
+
+if(e.target===modal){
+
+modal.classList.remove('open');
+
+}
+
+};
+
+document.getElementById('createContractBtn').onclick=async()=>{
+
+const productName = document.getElementById('productName').value.trim();
+
+const quantity = parseInt(document.getElementById('quantity').value);
+
+const unitPrice = parseFloat(document.getElementById('unitPrice').value);
+
+const sellerName = document.getElementById('sellerName').value.trim();
+
+const details = document.getElementById('contractDetails').value.trim();
+
+if(!productName || !quantity || !unitPrice || !sellerName){
+
+alert('Please complete all fields.');
+return;
+
+}
+
+const total = quantity * unitPrice;
+
+await addDoc(collection(db,'escrows'),{
+
+productName,
+quantity,
+unitPrice,
+sellerName,
+details,
+total,
+status:'created',
+createdAt:serverTimestamp()
+
+});
+
+toast('Escrow contract created.');
+
+modal.classList.remove('open');
+
+document.getElementById('productName').value='';
+document.getElementById('quantity').value='1';
+document.getElementById('unitPrice').value='';
+document.getElementById('sellerName').value='';
+document.getElementById('contractDetails').value='';
+
+};
+
+document.getElementById('searchInput').addEventListener('input',(e)=>{
+
+const text = e.target.value.toLowerCase();
+
+document.querySelectorAll('.contract-card').forEach(card=>{
+
+card.style.display =
+card.innerText.toLowerCase().includes(text)
+? 'block'
+: 'none';
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
