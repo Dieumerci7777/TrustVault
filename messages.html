@@ -413,7 +413,12 @@ html,body{height:100%;overflow:hidden;font-family:var(--font-main);background:va
 .fl-btn:hover{background:var(--accent);color:#000}
 .fl-btn.following{border-color:var(--border2);color:var(--muted)}
 .fl-btn.following:hover{border-color:var(--red);color:var(--red)}
-
+.chat-win {
+  display: flex;   /* instead of relying only on .hidden class */
+}
+.chat-win.hidden {
+  display: none !important;
+}
 /* New message btn */
 .new-msg-fab{display:none;position:fixed;bottom:80px;right:20px;z-index:400;width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--gold-d),var(--accent));border:none;color:#000;font-size:20px;cursor:pointer;box-shadow:0 6px 24px rgba(232,184,75,.4);transition:.2s;align-items:center;justify-content:center}
 .new-msg-fab:hover{transform:scale(1.08)}
@@ -1241,6 +1246,21 @@ async function openChat(user,group=false){
   unsubTyp=onSnapshot(doc(db,'chats',curRoomId,'typing'),snap=>{
     const d=snap.data()||{};$('typingName').innerText=user.name||'Someone';$('typingInd').classList.toggle('vis',d[user.uid]===true);
   });
+  function showChatWin() {
+  const chatWin = $('chatWin');
+  const sidebar = $('sidebar');
+  chatWin.classList.remove('hidden');
+  
+  if (window.innerWidth <= 768) {
+    sidebar.classList.remove('open');        // close sidebar completely
+    chatWin.style.display = 'flex';         // ensure it's visible
+    $('mobileBackBtn').style.display = 'flex';
+    // Force a repaint to avoid rendering glitches
+    chatWin.offsetHeight;
+  } else {
+    chatWin.style.display = 'flex';
+  }
+}
   // mark read
   const unread=await getDocs(query(msgsRef,where('senderId','!=',me.uid),where('read','==',false)));
   const batch=writeBatch(db);unread.forEach(d=>batch.update(d.ref,{read:true}));await batch.commit().catch(()=>{});
@@ -1267,7 +1287,21 @@ async function openGroupChat(group){
 }
 
 function getStatusLabel(s){return{online:'Online',busy:'Busy',away:'Away',dnd:'Do Not Disturb',trading:'Trading',offline:'Invisible'}[s]||'Online';}
-
+function showChatWin() {
+  const chatWin = $('chatWin');
+  const sidebar = $('sidebar');
+  chatWin.classList.remove('hidden');
+  
+  if (window.innerWidth <= 768) {
+    sidebar.classList.remove('open');        // close sidebar completely
+    chatWin.style.display = 'flex';         // ensure it's visible
+    $('mobileBackBtn').style.display = 'flex';
+    // Force a repaint to avoid rendering glitches
+    chatWin.offsetHeight;
+  } else {
+    chatWin.style.display = 'flex';
+  }
+}
 // ── RENDER MESSAGES ──
 function renderMsgs(snap){
   const area=$('msgsArea');
@@ -1646,5 +1680,3 @@ $('notifBtn').onclick=()=>toast('Notifications panel coming soon 🔔');
 </script>
 </body>
 </html>
-
-
