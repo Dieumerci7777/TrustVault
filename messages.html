@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +31,14 @@
 [data-theme="light"]{--bg:#F2F2F7;--sb-bg:#FFFFFF;--card:#FFFFFF;--border:#E0E0EC;--border2:#CACAD8;--text:#1A1A2E;--muted:#9898B8;--muted2:#6A6A8A;--accent:#E8B84B;--msg-me:#E8B84B;--msg-them:#EBEBF5}
 
 html{height:100%;height:-webkit-fill-available}
-body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(--font-main);background:var(--bg);color:var(--text)}
+body{
+  height:100%;
+  height:-webkit-fill-available;
+  overflow:hidden;
+  font-family:var(--font-main);
+  background:var(--bg);
+  color:var(--text);
+}
 
 /* ── NAV ── */
 .nav{
@@ -99,15 +108,17 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
 .ci-prev{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;display:flex;align-items:center;gap:4px}
 .unread{background:var(--accent);color:#000;font-size:10px;font-weight:800;border-radius:20px;padding:2px 6px;min-width:18px;text-align:center;flex-shrink:0;font-family:var(--font-mono)}
 
-/* ── CHAT WINDOW — KEY FIX: flex column, fill available height ── */
+/* ── CHAT WINDOW ── */
 .chat-win{
   display:flex;
   flex-direction:column;
   height:100%;
   position:relative;
   overflow:hidden;
-  /* Ensure nothing bleeds */
   min-height:0;
+}
+.chat-win.hidden {
+  display: none;
 }
 .chat-bg{position:absolute;inset:0;z-index:0;transition:background .4s;pointer-events:none}
 .chat-bg.pat-dots{background-image:radial-gradient(rgba(232,184,75,0.05) 1px,transparent 1px);background-size:24px 24px}
@@ -154,9 +165,9 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
 .upload-prog.vis{display:block}
 .upload-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--accent));width:0%;transition:width .1s;border-radius:2px}
 
-/* ── MESSAGES AREA — takes all remaining space ── */
+/* ── MESSAGES AREA ── */
 .msgs{
-  flex:1;
+  flex:1 1 0;
   overflow-y:auto;
   overflow-x:hidden;
   padding:16px;
@@ -166,7 +177,6 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
   position:relative;
   z-index:5;
   scroll-behavior:smooth;
-  /* Critical: allow shrinking */
   min-height:0;
   -webkit-overflow-scrolling:touch;
   overscroll-behavior-y:contain;
@@ -222,20 +232,29 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
 .empty-p{font-size:12px;color:var(--muted);max-width:220px;line-height:1.7}
 
 /* ── INPUT AREA — CRITICAL MOBILE FIX ── */
+/*
+  The input area must NEVER disappear on mobile.
+  Key fixes:
+  1. flex-shrink:0 prevents it from being squeezed
+  2. No fixed position (avoids keyboard issues on iOS)
+  3. Using padding-bottom with safe-area for iPhone notch
+  4. z-index ensures it stays on top
+*/
 .input-area{
   position:relative;
   z-index:10;
   padding:10px 14px;
-  /* Add safe area padding for iPhone home bar */
-  padding-bottom:calc(10px + var(--safe-bottom));
-  background:rgba(6,6,10,0.95);
+  padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));
+  background:rgba(6,6,10,0.97);
   backdrop-filter:blur(24px);
   border-top:1px solid var(--border);
   flex-shrink:0;
-  /* Prevent collapsing */
+  flex-grow:0;
   width:100%;
+  /* Ensure it never collapses */
+  min-height:62px;
 }
-[data-theme="light"] .input-area{background:rgba(255,255,255,0.95)}
+[data-theme="light"] .input-area{background:rgba(255,255,255,0.97)}
 .input-row{display:flex;gap:7px;align-items:flex-end}
 .input-acts{display:flex;gap:4px;flex-shrink:0}
 .input-box{
@@ -253,7 +272,7 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
 [data-theme="light"] .input-box{background:rgba(0,0,0,0.05)}
 .input-box:focus-within{border-color:rgba(232,184,75,0.5)}
 
-/* TEXTAREA FIX — critical for mobile */
+/* TEXTAREA — 16px prevents iOS zoom on focus */
 #msgInput{
   flex:1;
   resize:none;
@@ -262,17 +281,19 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
   outline:none;
   color:var(--text);
   font-family:var(--font-main);
-  font-size:16px; /* 16px prevents iOS zoom on focus */
+  font-size:16px;
   max-height:110px;
   min-height:22px;
   line-height:1.5;
-  /* Important: no fixed height — let it auto-size */
   height:22px;
   overflow-y:auto;
   -webkit-appearance:none;
   padding:0;
-  /* Ensure text is visible */
   caret-color:var(--accent);
+  /* Always visible */
+  display:block;
+  opacity:1;
+  visibility:visible;
 }
 #msgInput::placeholder{color:var(--muted);opacity:1}
 [data-theme="light"] #msgInput{color:var(--text)}
@@ -287,8 +308,9 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
   flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 3px 18px rgba(232,184,75,0.25);
-  /* Touch target */
   min-width:42px;
+  /* Touch target */
+  -webkit-tap-highlight-color:transparent;
 }
 .send-btn:hover{transform:scale(1.06);box-shadow:0 5px 24px rgba(232,184,75,0.4)}
 .send-btn:active{transform:scale(.95)}
@@ -480,23 +502,25 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
 ::-webkit-scrollbar-thumb:hover{background:var(--muted)}
 
 /* ═══════════════════════════════════════════════
-   MOBILE RESPONSIVE — Complete rewrite
-   
+   MOBILE RESPONSIVE
 ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
   :root {
     --sb-w: 100vw;
-    --nav-h: 58px;
+    --nav-h: 52px;
   }
 
   html, body {
     height: 100%;
     height: 100dvh;
     overflow: hidden;
+    /* Critical: prevent body scroll which hides input */
+    position: fixed;
+    width: 100%;
   }
 
   .nav {
-    padding: 0 12px;
+    padding: 0 10px;
   }
 
   .nav-links,
@@ -504,14 +528,18 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
     display: none;
   }
 
+  /* App fills full height below nav */
   .app {
     display: block;
-    height: calc(100dvh - var(--nav-h));
-    margin-top: var(--nav-h);
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
     overflow: hidden;
-    position: relative;
   }
 
+  /* Sidebar slides in/out */
   .sidebar {
     position: absolute;
     inset: 0;
@@ -520,61 +548,102 @@ body{height:100%;height:-webkit-fill-available;overflow:hidden;font-family:var(-
     z-index: 200;
     transform: translateX(-100%);
     transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
   }
 
   .sidebar.open {
     transform: translateX(0);
   }
 
+  /* Chat window — CRITICAL: flex column fills container */
   .chat-win {
-    position: relative;
-    inset: auto;
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    min-height: 0;
     overflow: hidden;
+    /* Hidden by default, shown when chat opens */
+    transform: translateX(100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
   }
 
+  /* Override .hidden class behavior on mobile */
+  .chat-win.hidden {
+    display: flex !important;
+    transform: translateX(100%);
+  }
+
+  /* When a chat is open on mobile */
+  .chat-win.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Messages area must flex-grow to push input to bottom */
   .msgs {
-    flex: 1 1 auto;
+    flex: 1 1 0;
     min-height: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding: 10px 10px 6px;
   }
 
+  /* Input area PINNED TO BOTTOM — never disappears */
   .input-area {
-    flex-shrink: 0;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    order: 999; /* always last in flex column */
+    position: relative;
+    z-index: 20;
     padding: 8px 10px;
     padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    /* Solid background so keyboard doesn't bleed through */
+    background: var(--bg) !important;
+    border-top: 1px solid var(--border);
+    /* Prevent any transform or visibility changes */
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    min-height: 58px;
   }
 
   #msgInput {
-    font-size: 16px;
-    max-height: 120px;
+    font-size: 16px; /* Prevents iOS zoom */
+    max-height: 100px;
   }
 
   .chat-hdr {
     padding: 8px 10px;
     gap: 8px;
+    flex-shrink: 0;
   }
 
   .hdr-acts .ib {
     width: 30px;
     height: 30px;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .send-btn {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
   }
 
   .new-msg-fab {
     display: flex;
+  }
+
+  /* Typing indicator */
+  .typing-ind {
+    flex-shrink: 0;
+  }
+
+  /* Bars */
+  .bar {
+    flex-shrink: 0;
   }
 }
 
@@ -647,7 +716,7 @@ body.compact .msg{padding:7px 11px;font-size:calc(var(--msg-font-size) - 1px)}
 
     <!-- Header -->
     <div class="chat-hdr" id="chatHdr">
-      <button class="ib mobileBack" id="mobileBackBtn" style="display:none">←</button>
+      <button class="ib" id="mobileBackBtn" style="display:none">←</button>
       <div class="av40" id="chatAv">💬</div>
       <div class="hdr-info">
         <div class="hdr-name" id="chatName">Select a conversation</div>
@@ -707,7 +776,7 @@ body.compact .msg{padding:7px 11px;font-size:calc(var(--msg-font-size) - 1px)}
       <button class="bar-x" id="cancelEditBtn">✕</button>
     </div>
 
-    <!-- INPUT AREA -->
+    <!-- INPUT AREA — always visible, always at bottom -->
     <div class="input-area" id="inputArea">
       <div class="input-row">
         <div class="input-acts">
@@ -969,745 +1038,1278 @@ const FB = {
   messagingSenderId:"933754600933",
   appId:"1:933754600933:web:b4d5cdfd0b6adc9b11030c"
 };
-const fbApp=initializeApp(FB);
-const db=getFirestore(fbApp);
-const auth=getAuth(fbApp);
-const storage=getStorage(fbApp);
+const fbApp = initializeApp(FB);
+const db = getFirestore(fbApp);
+const auth = getAuth(fbApp);
+const storage = getStorage(fbApp);
 
 // ── STATE ──
-let me=null, meData=null;
-let curChatUser=null, curRoomId=null, isGroup=false;
-let allUsers=[], myGroups=[];
-let unsubMsgs=null, unsubTyp=null;
-let selMode=false, selMsgs=new Set();
-let replyTo=null, editId=null;
-let ctxMsgId=null, ctxIsMe=false;
-let typingTimer=null;
-let isRec=false, mediaRec=null, audioChunks=[];
-let curTab='chats';
-let enterSend=true, showReceipts=true;
-let vaultData={photos:[],videos:[],audio:[],files:[]};
-let groupMembers=new Set();
-let curTheme='gold', curPat='none', curCol='default', curBubble='rounded', fontSize=13;
+let me = null, meData = null;
+let curChatUser = null, curRoomId = null, isGroup = false;
+let allUsers = [], myGroups = [];
+let unsubMsgs = null, unsubTyp = null;
+let selMode = false, selMsgs = new Set();
+let replyTo = null, editId = null;
+let ctxMsgId = null, ctxIsMe = false;
+let typingTimer = null;
+let isRec = false, mediaRec = null, audioChunks = [];
+let curTab = 'chats';
+let enterSend = true, showReceipts = true;
+let vaultData = {photos:[],videos:[],audio:[],files:[]};
+let groupMembers = new Set();
+let curTheme = 'gold', curPat = 'none', curCol = 'default', curBubble = 'rounded', fontSize = 13;
+const isMobile = () => window.innerWidth <= 768;
 
 // ── EMOJIS ──
-const EMOJIS=["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","😉","😌","😍","🥰","😘","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😔","😟","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😧","😮","😲","🥱","😴","😵","😷","🤒","🤕","🤑","😈","👿","👻","💀","💩","🤡","👾","😺","😸","😹","😻","👍","👎","👏","🙌","🤝","🙏","✌️","🤞","☝️","💪","🔥","⭐","💯","🎉","✅","❌","❤️","🧡","💛","💚","💙","💜","🖤","💔","💕","💞","💓","💗","💖","💘","💝","💰","💎","🏆","🥇","🚀","⚡","🌟","🎯","🎊","📈","📉","💹","🤑","🏦","💳","🪙","🔐","🛡️","⚡"];
+const EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","😉","😌","😍","🥰","😘","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😔","😟","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😧","😮","😲","🥱","😴","😵","😷","🤒","🤕","🤑","😈","👿","👻","💀","💩","🤡","👾","😺","😸","😹","😻","👍","👎","👏","🙌","🤝","🙏","✌️","🤞","☝️","💪","🔥","⭐","💯","🎉","✅","❌","❤️","🧡","💛","💚","💙","💜","🖤","💔","💕","💞","💓","💗","💖","💘","💝","💰","💎","🏆","🥇","🚀","⚡","🌟","🎯","🎊","📈","📉","💹","🤑","🏦","💳","🪙","🔐","🛡️","⚡"];
 
 // ── HELPERS ──
-const $=id=>document.getElementById(id);
-const esc=s=>s?String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])):'';
-const roomId=(a,b)=>a<b?`${a}_${b}`:`${b}_${a}`;
-const fmtTime=ts=>{if(!ts)return'';try{return ts.toDate().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}catch{return'';}};
-const fmtDate=ts=>{if(!ts)return'';try{const d=ts.toDate(),now=new Date(),diff=(now-d)/86400000;if(diff<1)return'Today';if(diff<2)return'Yesterday';return d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});}catch{return'';}};
-const fileSize=b=>{if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';};
-const fileIcon=type=>{if(!type)return'📄';if(type.startsWith('image/'))return'🖼️';if(type.startsWith('video/'))return'🎬';if(type.startsWith('audio/'))return'🎵';if(type.includes('pdf'))return'📑';if(type.includes('zip')||type.includes('rar'))return'📦';if(type.includes('doc'))return'📝';if(type.includes('sheet')||type.includes('excel'))return'📊';return'📄';};
+const $ = id => document.getElementById(id);
+const esc = s => s ? String(s).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])) : '';
+const roomId = (a, b) => a < b ? `${a}_${b}` : `${b}_${a}`;
+const fmtTime = ts => {
+  if (!ts) return '';
+  try { return ts.toDate().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
+  catch { return ''; }
+};
+const fmtDate = ts => {
+  if (!ts) return '';
+  try {
+    const d = ts.toDate(), now = new Date(), diff = (now - d) / 86400000;
+    if (diff < 1) return 'Today';
+    if (diff < 2) return 'Yesterday';
+    return d.toLocaleDateString([], {weekday:'short', month:'short', day:'numeric'});
+  } catch { return ''; }
+};
+const fileSize = b => {
+  if (b < 1024) return b + 'B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + 'KB';
+  return (b / 1048576).toFixed(1) + 'MB';
+};
+const fileIcon = type => {
+  if (!type) return '📄';
+  if (type.startsWith('image/')) return '🖼️';
+  if (type.startsWith('video/')) return '🎬';
+  if (type.startsWith('audio/')) return '🎵';
+  if (type.includes('pdf')) return '📑';
+  if (type.includes('zip') || type.includes('rar')) return '📦';
+  if (type.includes('doc')) return '📝';
+  if (type.includes('sheet') || type.includes('excel')) return '📊';
+  return '📄';
+};
 
-function toast(msg,color=''){
-  const t=document.createElement('div');t.className='toast';
-  if(color)t.style.borderLeftColor=color;
-  t.innerText=msg;document.body.appendChild(t);
-  setTimeout(()=>t.remove(),2800);
+function toast(msg, color = '') {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  if (color) t.style.borderLeftColor = color;
+  t.innerText = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
 }
-function playSound(){
-  if(localStorage.getItem('th_sound')!=='true')return;
-  try{const ctx=new AudioContext(),o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=900;g.gain.setValueAtTime(0.08,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.12);o.start();o.stop(ctx.currentTime+0.12);}catch{}
+
+function playSound() {
+  if (localStorage.getItem('th_sound') !== 'true') return;
+  try {
+    const ctx = new AudioContext(), o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 900;
+    g.gain.setValueAtTime(0.08, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+    o.start(); o.stop(ctx.currentTime + 0.12);
+  } catch {}
 }
 
 // ── SETTINGS LOAD/APPLY ──
-function loadSettings(){
-  curTheme=localStorage.getItem('th_theme')||'gold';
-  curPat=localStorage.getItem('th_pat')||'none';
-  curCol=localStorage.getItem('th_col')||'default';
-  curBubble=localStorage.getItem('th_bubble')||'rounded';
-  fontSize=parseInt(localStorage.getItem('th_fs')||'13');
-  enterSend=localStorage.getItem('th_enter')!=='false';
-  showReceipts=localStorage.getItem('th_receipts')!=='false';
-  const compact=localStorage.getItem('th_compact')==='true';
-  applyTheme(curTheme,false);applyPat(curPat,false);applyCol(curCol,false);applyBubble(curBubble,false);applyFs(fontSize,false);
-  if(compact)document.body.classList.add('compact');
-  document.querySelectorAll('.theme-sw').forEach(s=>s.classList.toggle('act',s.dataset.theme===curTheme));
-  document.querySelectorAll('.pat-item').forEach(p=>p.classList.toggle('act',p.dataset.pat===curPat));
-  document.querySelectorAll('.cc').forEach(c=>c.classList.toggle('act',c.dataset.col===curCol));
-  document.querySelectorAll('.bopt').forEach(b=>b.classList.toggle('act',b.dataset.bs===curBubble));
-  $('fontSlider').value=fontSize;$('fontLabel').innerText=fontSize+'px';
-  $('enterSendToggle').classList.toggle('on',enterSend);
-  $('readReceiptToggle').classList.toggle('on',showReceipts);
-  $('compactToggle').classList.toggle('on',compact);
-  $('soundToggle').classList.toggle('on',localStorage.getItem('th_sound')==='true');
-  const prv=localStorage.getItem('th_privacy')||'public';
-  document.querySelectorAll('.prv-opt').forEach(p=>p.classList.toggle('act',p.dataset.prv===prv));
+function loadSettings() {
+  curTheme = localStorage.getItem('th_theme') || 'gold';
+  curPat = localStorage.getItem('th_pat') || 'none';
+  curCol = localStorage.getItem('th_col') || 'default';
+  curBubble = localStorage.getItem('th_bubble') || 'rounded';
+  fontSize = parseInt(localStorage.getItem('th_fs') || '13');
+  enterSend = localStorage.getItem('th_enter') !== 'false';
+  showReceipts = localStorage.getItem('th_receipts') !== 'false';
+  const compact = localStorage.getItem('th_compact') === 'true';
+  applyTheme(curTheme, false);
+  applyPat(curPat, false);
+  applyCol(curCol, false);
+  applyBubble(curBubble, false);
+  applyFs(fontSize, false);
+  if (compact) document.body.classList.add('compact');
+  document.querySelectorAll('.theme-sw').forEach(s => s.classList.toggle('act', s.dataset.theme === curTheme));
+  document.querySelectorAll('.pat-item').forEach(p => p.classList.toggle('act', p.dataset.pat === curPat));
+  document.querySelectorAll('.cc').forEach(c => c.classList.toggle('act', c.dataset.col === curCol));
+  document.querySelectorAll('.bopt').forEach(b => b.classList.toggle('act', b.dataset.bs === curBubble));
+  $('fontSlider').value = fontSize;
+  $('fontLabel').innerText = fontSize + 'px';
+  $('enterSendToggle').classList.toggle('on', enterSend);
+  $('readReceiptToggle').classList.toggle('on', showReceipts);
+  $('compactToggle').classList.toggle('on', compact);
+  $('soundToggle').classList.toggle('on', localStorage.getItem('th_sound') === 'true');
+  const prv = localStorage.getItem('th_privacy') || 'public';
+  document.querySelectorAll('.prv-opt').forEach(p => p.classList.toggle('act', p.dataset.prv === prv));
   updatePrivacyIcon(prv);
 }
-function applyTheme(n,save=true){document.body.setAttribute('data-theme',n);if(save){localStorage.setItem('th_theme',n);curTheme=n;}}
-function applyPat(p,save=true){const bg=$('chatBg');bg.className='chat-bg';if(p&&p!=='none')bg.classList.add(p);if(save){localStorage.setItem('th_pat',p);curPat=p;}}
-function applyCol(c,save=true){const bg=$('chatBg');if(c==='default'||!c)bg.style.backgroundColor='';else bg.style.backgroundColor=c;if(save){localStorage.setItem('th_col',c);curCol=c;}}
-function applyBubble(s,save=true){
-  const l={'rounded':'4px 18px 18px 18px','sharp':'4px 6px 6px 6px','pill':'4px 24px 24px 24px'};
-  const r={'rounded':'18px 4px 18px 18px','sharp':'6px 4px 6px 6px','pill':'24px 4px 24px 24px'};
-  let st=document.getElementById('bubbleSt');if(!st){st=document.createElement('style');st.id='bubbleSt';document.head.appendChild(st);}
-  st.textContent=`.l .msg{border-radius:${l[s]||l.rounded}!important}.r .msg{border-radius:${r[s]||r.rounded}!important}`;
-  if(save){localStorage.setItem('th_bubble',s);curBubble=s;}
+
+function applyTheme(n, save = true) {
+  document.body.setAttribute('data-theme', n);
+  if (save) { localStorage.setItem('th_theme', n); curTheme = n; }
 }
-function applyFs(v,save=true){document.documentElement.style.setProperty('--msg-font-size',v+'px');if(save){localStorage.setItem('th_fs',v);fontSize=v;}}
-function updatePrivacyIcon(prv){const av=$('navAv');if(prv==='private')av.classList.add('is-private');else av.classList.remove('is-private');}
+function applyPat(p, save = true) {
+  const bg = $('chatBg');
+  bg.className = 'chat-bg';
+  if (p && p !== 'none') bg.classList.add(p);
+  if (save) { localStorage.setItem('th_pat', p); curPat = p; }
+}
+function applyCol(c, save = true) {
+  const bg = $('chatBg');
+  if (c === 'default' || !c) bg.style.backgroundColor = '';
+  else bg.style.backgroundColor = c;
+  if (save) { localStorage.setItem('th_col', c); curCol = c; }
+}
+function applyBubble(s, save = true) {
+  const l = {rounded:'4px 18px 18px 18px', sharp:'4px 6px 6px 6px', pill:'4px 24px 24px 24px'};
+  const r = {rounded:'18px 4px 18px 18px', sharp:'6px 4px 6px 6px', pill:'24px 4px 24px 24px'};
+  let st = document.getElementById('bubbleSt');
+  if (!st) { st = document.createElement('style'); st.id = 'bubbleSt'; document.head.appendChild(st); }
+  st.textContent = `.l .msg{border-radius:${l[s]||l.rounded}!important}.r .msg{border-radius:${r[s]||r.rounded}!important}`;
+  if (save) { localStorage.setItem('th_bubble', s); curBubble = s; }
+}
+function applyFs(v, save = true) {
+  document.documentElement.style.setProperty('--msg-font-size', v + 'px');
+  if (save) { localStorage.setItem('th_fs', v); fontSize = v; }
+}
+function updatePrivacyIcon(prv) {
+  const av = $('navAv');
+  if (prv === 'private') av.classList.add('is-private');
+  else av.classList.remove('is-private');
+}
 
 // ── SETTINGS EVENTS ──
-$('settingsBtn').onclick=()=>{
+$('settingsBtn').onclick = () => {
   $('settingsOverlay').classList.add('open');
-  if(meData){$('spAv').innerText=(meData.name||'?')[0].toUpperCase();$('spName').innerText=meData.name||'—';$('spEmail').innerText=meData.email||'—';}
-  $('storageUsed').innerText=`${(vaultData.photos.length+vaultData.videos.length+vaultData.audio.length+vaultData.files.length)} items`;
+  if (meData) {
+    $('spAv').innerText = (meData.name || '?')[0].toUpperCase();
+    $('spName').innerText = meData.name || '—';
+    $('spEmail').innerText = meData.email || '—';
+  }
+  $('storageUsed').innerText = `${(vaultData.photos.length + vaultData.videos.length + vaultData.audio.length + vaultData.files.length)} items`;
 };
-$('closeSettings').onclick=()=>$('settingsOverlay').classList.remove('open');
-$('settingsOverlay').addEventListener('click',e=>{if(e.target===$('settingsOverlay'))$('settingsOverlay').classList.remove('open');});
-document.querySelectorAll('.theme-sw').forEach(sw=>{sw.onclick=()=>{document.querySelectorAll('.theme-sw').forEach(s=>s.classList.remove('act'));sw.classList.add('act');applyTheme(sw.dataset.theme);toast('Theme applied ✓');};});
-document.querySelectorAll('.pat-item').forEach(it=>{it.onclick=()=>{document.querySelectorAll('.pat-item').forEach(p=>p.classList.remove('act'));it.classList.add('act');applyPat(it.dataset.pat);};});
-document.querySelectorAll('.cc').forEach(chip=>{chip.onclick=()=>{document.querySelectorAll('.cc').forEach(c=>c.classList.remove('act'));chip.classList.add('act');applyCol(chip.dataset.col);};});
-$('fontSlider').oninput=e=>{const v=parseInt(e.target.value);$('fontLabel').innerText=v+'px';applyFs(v);};
-document.querySelectorAll('.bopt').forEach(opt=>{opt.onclick=()=>{document.querySelectorAll('.bopt').forEach(b=>b.classList.remove('act'));opt.classList.add('act');applyBubble(opt.dataset.bs);};});
-document.querySelectorAll('.prv-opt').forEach(opt=>{
-  opt.onclick=()=>{document.querySelectorAll('.prv-opt').forEach(p=>p.classList.remove('act'));opt.classList.add('act');
-    const prv=opt.dataset.prv;localStorage.setItem('th_privacy',prv);updatePrivacyIcon(prv);
-    if(me)updateDoc(doc(db,'users',me.uid),{privacy:prv}).catch(()=>{});
-    toast(prv==='private'?'Account set to Private 🔒':'Account set to Public 🌍');
+$('closeSettings').onclick = () => $('settingsOverlay').classList.remove('open');
+$('settingsOverlay').addEventListener('click', e => { if (e.target === $('settingsOverlay')) $('settingsOverlay').classList.remove('open'); });
+
+document.querySelectorAll('.theme-sw').forEach(sw => {
+  sw.onclick = () => {
+    document.querySelectorAll('.theme-sw').forEach(s => s.classList.remove('act'));
+    sw.classList.add('act');
+    applyTheme(sw.dataset.theme);
+    toast('Theme applied ✓');
   };
 });
-document.querySelectorAll('.st-opt').forEach(opt=>{
-  opt.onclick=()=>{document.querySelectorAll('.st-opt').forEach(s=>s.classList.remove('act'));opt.classList.add('act');
-    if(me)updateDoc(doc(db,'users',me.uid),{customStatus:opt.dataset.st}).catch(()=>{});toast('Status updated');
+document.querySelectorAll('.pat-item').forEach(it => {
+  it.onclick = () => {
+    document.querySelectorAll('.pat-item').forEach(p => p.classList.remove('act'));
+    it.classList.add('act');
+    applyPat(it.dataset.pat);
   };
 });
-[['compactToggle','th_compact',v=>document.body.classList.toggle('compact',v)],
- ['enterSendToggle','th_enter',v=>enterSend=v],
- ['readReceiptToggle','th_receipts',v=>showReceipts=v],
- ['soundToggle','th_sound',null],['notifToggle','th_notif',null],['vibToggle','th_vib',null],
- ['searchableToggle','th_searchable',null],['onlineStatusToggle','th_onlineSt',null],
- ['lastSeenToggle','th_lastSeen',null],['linkPrevToggle','th_linkPrev',null],
- ['autoSaveToggle','th_autoSave',null],['twoFaToggle','th_2fa',null],
-].forEach(([id,key,cb])=>{$(id).onclick=function(){this.classList.toggle('on');const v=this.classList.contains('on');localStorage.setItem(key,v);if(cb)cb(v);};});
-$('editNameBtn').onclick=async()=>{const n=prompt('Enter new display name:',meData?.name||'');if(!n?.trim())return;await updateDoc(doc(db,'users',me.uid),{name:n.trim()});meData={...meData,name:n.trim()};$('navName').innerText=n.trim();$('navAv').innerText=n[0].toUpperCase();$('spAv').innerText=n[0].toUpperCase();$('spName').innerText=n.trim();toast('Name updated ✓');};
-$('editBioBtn').onclick=async()=>{const b=prompt('Set your bio:',meData?.bio||'');if(b===null)return;await updateDoc(doc(db,'users',me.uid),{bio:b.slice(0,100)});meData={...meData,bio:b};toast('Bio updated ✓');};
-$('spLogout').onclick=()=>{if(confirm('Sign out?'))signOutFlow();};
-$('clearCacheBtn').onclick=()=>toast('Cache cleared 🗑️','var(--red)');
-$('exportChatBtn').onclick=()=>toast('Chat export coming soon 📤');
+document.querySelectorAll('.cc').forEach(chip => {
+  chip.onclick = () => {
+    document.querySelectorAll('.cc').forEach(c => c.classList.remove('act'));
+    chip.classList.add('act');
+    applyCol(chip.dataset.col);
+  };
+});
+$('fontSlider').oninput = e => {
+  const v = parseInt(e.target.value);
+  $('fontLabel').innerText = v + 'px';
+  applyFs(v);
+};
+document.querySelectorAll('.bopt').forEach(opt => {
+  opt.onclick = () => {
+    document.querySelectorAll('.bopt').forEach(b => b.classList.remove('act'));
+    opt.classList.add('act');
+    applyBubble(opt.dataset.bs);
+  };
+});
+document.querySelectorAll('.prv-opt').forEach(opt => {
+  opt.onclick = () => {
+    document.querySelectorAll('.prv-opt').forEach(p => p.classList.remove('act'));
+    opt.classList.add('act');
+    const prv = opt.dataset.prv;
+    localStorage.setItem('th_privacy', prv);
+    updatePrivacyIcon(prv);
+    if (me) updateDoc(doc(db, 'users', me.uid), {privacy: prv}).catch(() => {});
+    toast(prv === 'private' ? 'Account set to Private 🔒' : 'Account set to Public 🌍');
+  };
+});
+document.querySelectorAll('.st-opt').forEach(opt => {
+  opt.onclick = () => {
+    document.querySelectorAll('.st-opt').forEach(s => s.classList.remove('act'));
+    opt.classList.add('act');
+    if (me) updateDoc(doc(db, 'users', me.uid), {customStatus: opt.dataset.st}).catch(() => {});
+    toast('Status updated');
+  };
+});
+
+[
+  ['compactToggle','th_compact', v => document.body.classList.toggle('compact', v)],
+  ['enterSendToggle','th_enter', v => enterSend = v],
+  ['readReceiptToggle','th_receipts', v => showReceipts = v],
+  ['soundToggle','th_sound', null],
+  ['notifToggle','th_notif', null],
+  ['vibToggle','th_vib', null],
+  ['searchableToggle','th_searchable', null],
+  ['onlineStatusToggle','th_onlineSt', null],
+  ['lastSeenToggle','th_lastSeen', null],
+  ['linkPrevToggle','th_linkPrev', null],
+  ['autoSaveToggle','th_autoSave', null],
+  ['twoFaToggle','th_2fa', null],
+].forEach(([id, key, cb]) => {
+  $(id).onclick = function() {
+    this.classList.toggle('on');
+    const v = this.classList.contains('on');
+    localStorage.setItem(key, v);
+    if (cb) cb(v);
+  };
+});
+
+$('editNameBtn').onclick = async () => {
+  const n = prompt('Enter new display name:', meData?.name || '');
+  if (!n?.trim()) return;
+  await updateDoc(doc(db, 'users', me.uid), {name: n.trim()});
+  meData = {...meData, name: n.trim()};
+  $('navName').innerText = n.trim();
+  $('navAv').innerText = n[0].toUpperCase();
+  $('spAv').innerText = n[0].toUpperCase();
+  $('spName').innerText = n.trim();
+  toast('Name updated ✓');
+};
+$('editBioBtn').onclick = async () => {
+  const b = prompt('Set your bio:', meData?.bio || '');
+  if (b === null) return;
+  await updateDoc(doc(db, 'users', me.uid), {bio: b.slice(0, 100)});
+  meData = {...meData, bio: b};
+  toast('Bio updated ✓');
+};
+$('spLogout').onclick = () => { if (confirm('Sign out?')) signOutFlow(); };
+$('clearCacheBtn').onclick = () => toast('Cache cleared 🗑️', 'var(--red)');
+$('exportChatBtn').onclick = () => toast('Chat export coming soon 📤');
 
 // ── AUTH ──
-onAuthStateChanged(auth,async user=>{
-  if(!user){window.location.href='login.html';return;}
-  me=user;
-  const uRef=doc(db,'users',me.uid);
-  let snap=await getDoc(uRef);
-  if(!snap.exists()){
-    await setDoc(uRef,{uid:me.uid,email:me.email,name:me.email.split('@')[0],online:true,lastSeen:serverTimestamp(),followers:[],following:[],privacy:'public',customStatus:'online',createdAt:serverTimestamp()});
-    snap=await getDoc(uRef);
-  } else {await updateDoc(uRef,{online:true,lastSeen:serverTimestamp()}).catch(()=>{});}
-  meData=snap.data();
-  const ini=(meData.name||'?')[0].toUpperCase();
-  $('navAv').innerText=ini;$('navName').innerText=meData.name||me.email;
-  if(meData.privacy==='private')$('navAv').classList.add('is-private');
-  $('authGuard').style.display='none';$('appContainer').style.display='';
-  // On mobile show sidebar initially, on desktop show grid
-  if(window.innerWidth>768){
-    $('appContainer').style.display='grid';
-    $('chatWin').classList.remove('hidden');
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = 'login.html'; return; }
+  me = user;
+  const uRef = doc(db, 'users', me.uid);
+  let snap = await getDoc(uRef);
+  if (!snap.exists()) {
+    await setDoc(uRef, {
+      uid: me.uid, email: me.email,
+      name: me.email.split('@')[0],
+      online: true, lastSeen: serverTimestamp(),
+      followers: [], following: [],
+      privacy: 'public', customStatus: 'online',
+      createdAt: serverTimestamp()
+    });
+    snap = await getDoc(uRef);
   } else {
-    $('appContainer').style.display='block';
+    await updateDoc(uRef, {online: true, lastSeen: serverTimestamp()}).catch(() => {});
+  }
+  meData = snap.data();
+  const ini = (meData.name || '?')[0].toUpperCase();
+  $('navAv').innerText = ini;
+  $('navName').innerText = meData.name || me.email;
+  if (meData.privacy === 'private') $('navAv').classList.add('is-private');
+
+  $('authGuard').style.display = 'none';
+  $('appContainer').style.display = '';
+
+  // Layout init
+  if (isMobile()) {
+    // Mobile: show sidebar first, chat hidden behind
     $('sidebar').classList.add('open');
     $('chatWin').classList.add('hidden');
+  } else {
+    // Desktop: grid layout, both visible
+    $('appContainer').style.display = 'grid';
+    $('chatWin').classList.remove('hidden');
   }
-  window.addEventListener('beforeunload',()=>updateDoc(uRef,{online:false,lastSeen:serverTimestamp()}).catch(()=>{}));
-  loadSettings();await loadAllUsers();await loadGroups();renderSidebar(curTab);
-  setupInput();setupHdrBtns();setupCtx();setupSelBtns();setupFile();setupVoice();setupLightbox();setupDiscover();setupTabs();setupSearch();setupMobile();setupVault();setupGroupModal();
+
+  window.addEventListener('beforeunload', () =>
+    updateDoc(uRef, {online: false, lastSeen: serverTimestamp()}).catch(() => {})
+  );
+
+  loadSettings();
+  await loadAllUsers();
+  await loadGroups();
+  renderSidebar(curTab);
+  setupInput();
+  setupHdrBtns();
+  setupCtx();
+  setupSelBtns();
+  setupFile();
+  setupVoice();
+  setupLightbox();
+  setupDiscover();
+  setupTabs();
+  setupSearch();
+  setupMobile();
+  setupVault();
+  setupGroupModal();
 });
 
-function signOutFlow(){
-  updateDoc(doc(db,'users',me.uid),{online:false}).catch(()=>{});
-  signOut(auth).then(()=>window.location.href='login.html');
+function signOutFlow() {
+  updateDoc(doc(db, 'users', me.uid), {online: false}).catch(() => {});
+  signOut(auth).then(() => window.location.href = 'login.html');
 }
-$('logoutBtn').onclick=()=>{if(confirm('Sign out of TradeHub?'))signOutFlow();};
+$('logoutBtn').onclick = () => { if (confirm('Sign out of TradeHub?')) signOutFlow(); };
 
 // ── USERS & GROUPS ──
-async function loadAllUsers(){
-  const s=await getDocs(collection(db,'users'));allUsers=[];
-  s.forEach(d=>{if(d.id!==me.uid)allUsers.push({uid:d.id,...d.data()});});
-  const ms=await getDoc(doc(db,'users',me.uid));meData=ms.data();
+async function loadAllUsers() {
+  const s = await getDocs(collection(db, 'users'));
+  allUsers = [];
+  s.forEach(d => { if (d.id !== me.uid) allUsers.push({uid: d.id, ...d.data()}); });
+  const ms = await getDoc(doc(db, 'users', me.uid));
+  meData = ms.data();
 }
-async function loadGroups(){
-  try{const s=await getDocs(query(collection(db,'groups'),where('members','array-contains',me.uid)));myGroups=[];s.forEach(d=>myGroups.push({id:d.id,...d.data()}));}catch{myGroups=[];}
+
+async function loadGroups() {
+  try {
+    const s = await getDocs(query(collection(db, 'groups'), where('members', 'array-contains', me.uid)));
+    myGroups = [];
+    s.forEach(d => myGroups.push({id: d.id, ...d.data()}));
+  } catch { myGroups = []; }
 }
 
 // ── TABS ──
-function setupTabs(){
-  document.querySelectorAll('.tb').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.tb').forEach(b=>b.classList.remove('act'));btn.classList.add('act');curTab=btn.dataset.tab;renderSidebar(curTab);};});
+function setupTabs() {
+  document.querySelectorAll('.tb').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.tb').forEach(b => b.classList.remove('act'));
+      btn.classList.add('act');
+      curTab = btn.dataset.tab;
+      renderSidebar(curTab);
+    };
+  });
 }
 
-function renderSidebar(tab){
-  const scroll=$('chatScroll');
-  const term=($('searchInput').value||'').toLowerCase();
-  if(tab==='chats'){
-    let list=allUsers.filter(u=>!term||(u.name||'').toLowerCase().includes(term)||(u.email||'').toLowerCase().includes(term));
-    if(!list.length){scroll.innerHTML=`<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7">No users found.<br>Use <b style="color:var(--accent)">Discover</b> to find traders.</div>`;return;}
-    scroll.innerHTML=list.map(u=>ciHTML(u)).join('');bindCIs();list.forEach(u=>attachPreview(u));
-  } else if(tab==='groups'){
-    let list=myGroups.filter(g=>!term||g.name.toLowerCase().includes(term));
-    if(!list.length){scroll.innerHTML=`<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7">No groups yet.<br>Tap <b style="color:var(--accent)">👥</b> to create one.</div>`;return;}
-    scroll.innerHTML=list.map(g=>groupCiHTML(g)).join('');bindGroupCIs();
-  } else if(tab==='following'){
-    const fl=meData?.following||[];let list=allUsers.filter(u=>fl.includes(u.uid));
-    if(term)list=list.filter(u=>(u.name||'').toLowerCase().includes(term));
-    if(!list.length){scroll.innerHTML=`<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7">Not following anyone yet.<br>Use <b style="color:var(--accent)">Discover</b>.</div>`;return;}
-    scroll.innerHTML=list.map(u=>ciHTML(u)).join('');bindCIs();list.forEach(u=>attachPreview(u));
+function renderSidebar(tab) {
+  const scroll = $('chatScroll');
+  const term = ($('searchInput').value || '').toLowerCase();
+
+  if (tab === 'chats') {
+    let list = allUsers.filter(u => !term || (u.name || '').toLowerCase().includes(term) || (u.email || '').toLowerCase().includes(term));
+    if (!list.length) {
+      scroll.innerHTML = `<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7">No users found.<br>Use <b style="color:var(--accent)">Discover</b> to find traders.</div>`;
+      return;
+    }
+    scroll.innerHTML = list.map(u => ciHTML(u)).join('');
+    bindCIs();
+    list.forEach(u => attachPreview(u));
+
+  } else if (tab === 'groups') {
+    let list = myGroups.filter(g => !term || g.name.toLowerCase().includes(term));
+    if (!list.length) {
+      scroll.innerHTML = `<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7">No groups yet.<br>Tap <b style="color:var(--accent)">👥</b> to create one.</div>`;
+      return;
+    }
+    scroll.innerHTML = list.map(g => groupCiHTML(g)).join('');
+    bindGroupCIs();
+
+  } else if (tab === 'following') {
+    const fl = meData?.following || [];
+    let list = allUsers.filter(u => fl.includes(u.uid));
+    if (term) list = list.filter(u => (u.name || '').toLowerCase().includes(term));
+    if (!list.length) {
+      scroll.innerHTML = `<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7">Not following anyone yet.<br>Use <b style="color:var(--accent)">Discover</b>.</div>`;
+      return;
+    }
+    scroll.innerHTML = list.map(u => ciHTML(u)).join('');
+    bindCIs();
+    list.forEach(u => attachPreview(u));
+
   } else {
-    const flrs=meData?.followers||[];let list=allUsers.filter(u=>flrs.includes(u.uid));
-    if(term)list=list.filter(u=>(u.name||'').toLowerCase().includes(term));
-    if(!list.length){scroll.innerHTML=`<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No followers yet.</div>`;return;}
-    scroll.innerHTML=list.map(u=>ciHTML(u)).join('');bindCIs();list.forEach(u=>attachPreview(u));
-  }
-}
-function ciHTML(u){return`<div class="ci" data-uid="${u.uid}"><div class="av40">${(u.name||'?')[0].toUpperCase()}${u.online?'<div class="on-dot"></div>':''}</div><div class="ci-info"><div class="ci-top"><span class="ci-name">${esc(u.name||u.email)}</span><span class="ci-time" id="t-${u.uid}"></span></div><div class="ci-prev" id="p-${u.uid}">${u.online?'<span style="color:var(--green)">●</span> Online':'Tap to chat'}</div></div></div>`;}
-function groupCiHTML(g){return`<div class="ci" data-gid="${g.id}"><div class="av40 group-av">${(g.name||'G')[0].toUpperCase()}</div><div class="ci-info"><div class="ci-top"><span class="ci-name">${esc(g.name)}</span><span class="ci-time" id="tg-${g.id}"></span></div><div class="ci-prev" id="pg-${g.id}">${(g.members||[]).length} members</div></div></div>`;}
-function bindCIs(){document.querySelectorAll('.ci[data-uid]').forEach(el=>{el.onclick=()=>{const u=allUsers.find(u=>u.uid===el.dataset.uid);if(u)openChat(u,false);};})}
-function bindGroupCIs(){document.querySelectorAll('.ci[data-gid]').forEach(el=>{el.onclick=()=>{const g=myGroups.find(g=>g.id===el.dataset.gid);if(g)openGroupChat(g);};})}
-function attachPreview(u){
-  const rid=roomId(me.uid,u.uid);
-  onSnapshot(query(collection(db,'chats',rid,'messages'),orderBy('time','desc')),snap=>{
-    if(snap.empty)return;
-    const d=snap.docs[0].data();
-    let prev=d.text||(d.fileUrl?`${fileIcon(d.fileType)} Attachment`:'');
-    if(d.deleted)prev='🚫 Deleted';if(prev.length>36)prev=prev.slice(0,33)+'…';
-    const pe=$(`p-${u.uid}`),te=$(`t-${u.uid}`);
-    if(pe)pe.innerHTML=prev;
-    if(te&&d.time)try{te.innerText=d.time.toDate().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}catch{}
-  });
-}
-function setupSearch(){$('searchInput').oninput=()=>renderSidebar(curTab);}
-
-// ── DISCOVER ──
-function setupDiscover(){
-  $('discoverBtn').onclick=()=>{renderDiscover();$('discoverModal').classList.add('open');};
-  $('closeDiscover').onclick=()=>$('discoverModal').classList.remove('open');
-  $('discoverModal').addEventListener('click',e=>{if(e.target===$('discoverModal'))$('discoverModal').classList.remove('open');});
-  $('discoverSearch').oninput=()=>renderDiscover($('discoverSearch').value);
-}
-function renderDiscover(term=''){
-  const list=$('discoverList'),fl=meData?.following||[];
-  let users=allUsers;if(term)users=users.filter(u=>(u.name||'').toLowerCase().includes(term.toLowerCase())||(u.email||'').toLowerCase().includes(term.toLowerCase()));
-  if(!users.length){list.innerHTML='<div style="color:var(--muted);padding:20px;text-align:center">No traders found</div>';return;}
-  list.innerHTML=users.map(u=>{const isF=fl.includes(u.uid);return`<div class="user-row2"><div class="av40" style="width:38px;height:38px;font-size:14px;border-radius:10px;flex-shrink:0">${(u.name||'?')[0].toUpperCase()}${u.online?'<div class="on-dot"></div>':''}</div><div class="ur-info"><div class="ur-name">${esc(u.name||u.email)}</div><div class="ur-email">${esc(u.email||'')}</div><div class="ur-status">${u.online?'<span style="color:var(--green)">● Online</span>':'<span style="color:var(--muted)">● Offline</span>'}</div></div><button class="fl-btn ${isF?'following':''}" data-uid="${u.uid}">${isF?'Following':'+ Follow'}</button></div>`;}).join('');
-  list.querySelectorAll('.fl-btn').forEach(btn=>{btn.onclick=async()=>{const uid=btn.dataset.uid,fl2=meData?.following||[];if(fl2.includes(uid)){await unfollowUser(uid);btn.classList.remove('following');btn.innerText='+ Follow';}else{await followUser(uid);btn.classList.add('following');btn.innerText='Following';}};});
-}
-async function followUser(uid){
-  await updateDoc(doc(db,'users',me.uid),{following:arrayUnion(uid)});
-  await updateDoc(doc(db,'users',uid),{followers:arrayUnion(me.uid)});
-  meData=(await getDoc(doc(db,'users',me.uid))).data();
-  toast('Now following! 🎉','var(--green)');renderSidebar(curTab);
-}
-async function unfollowUser(uid){
-  await updateDoc(doc(db,'users',me.uid),{following:arrayRemove(uid)});
-  await updateDoc(doc(db,'users',uid),{followers:arrayRemove(me.uid)});
-  meData=(await getDoc(doc(db,'users',me.uid))).data();
-  toast('Unfollowed');renderSidebar(curTab);
-}
-
-// ── GROUP MODAL ──
-function setupGroupModal(){
-  $('newGroupBtn').onclick=()=>{renderMemberList();$('groupModal').classList.add('open');$('groupName').value='';$('groupDesc').value='';groupMembers.clear();updateSelMemberCount();};
-  $('closeGroup').onclick=()=>$('groupModal').classList.remove('open');
-  $('groupModal').addEventListener('click',e=>{if(e.target===$('groupModal'))$('groupModal').classList.remove('open');});
-  $('createGroupBtn').onclick=createGroup;
-}
-function renderMemberList(){
-  const ml=$('memberList');
-  ml.innerHTML=allUsers.map(u=>`<div class="usr-sel ${groupMembers.has(u.uid)?'sel':''}" data-uid="${u.uid}"><div class="usr-sel-chk">${groupMembers.has(u.uid)?'✓':''}</div><div class="av" style="width:32px;height:32px;font-size:12px;border-radius:8px;flex-shrink:0">${(u.name||'?')[0].toUpperCase()}</div><div><div class="usr-sel-name">${esc(u.name||u.email)}</div><div class="usr-sel-email">${esc(u.email||'')}</div></div></div>`).join('');
-  $('memberList').querySelectorAll('.usr-sel').forEach(el=>{el.onclick=()=>{const uid=el.dataset.uid;if(groupMembers.has(uid)){groupMembers.delete(uid);el.classList.remove('sel');el.querySelector('.usr-sel-chk').innerText='';}else{groupMembers.add(uid);el.classList.add('sel');el.querySelector('.usr-sel-chk').innerText='✓';}updateSelMemberCount();};});
-}
-function updateSelMemberCount(){$('selMemberCount').innerText=`${groupMembers.size} member${groupMembers.size!==1?'s':''} selected`;}
-async function createGroup(){
-  const name=$('groupName').value.trim();if(!name){toast('Please enter a group name','var(--red)');return;}
-  if(groupMembers.size<1){toast('Add at least 1 member','var(--red)');return;}
-  $('createGroupBtn').disabled=true;$('createGroupBtn').innerText='Creating…';
-  try{
-    const members=[me.uid,...groupMembers];
-    const gRef=await addDoc(collection(db,'groups'),{name,description:$('groupDesc').value.trim(),members,createdBy:me.uid,createdAt:serverTimestamp(),avatar:name[0].toUpperCase()});
-    await loadGroups();renderSidebar('groups');
-    document.querySelectorAll('.tb').forEach(b=>b.classList.remove('act'));
-    document.querySelector('.tb[data-tab="groups"]').classList.add('act');curTab='groups';
-    $('groupModal').classList.remove('open');toast(`Group "${name}" created! 🎉`,'var(--green)');
-    const g=myGroups.find(g=>g.id===gRef.id);if(g)openGroupChat(g);
-  }catch(e){toast('Failed: '+e.message,'var(--red)');}
-  $('createGroupBtn').disabled=false;$('createGroupBtn').innerText='🚀 Create Group';
-}
-
-// ── OPEN CHAT ──
-async function openChat(user){
-  if(unsubMsgs)unsubMsgs();if(unsubTyp)unsubTyp();
-  curChatUser=user;curRoomId=roomId(me.uid,user.uid);isGroup=false;
-  exitSel();cancelReply();cancelEdit();
-  $('chatAv').className='av40';$('chatAv').innerText=(user.name||'?')[0].toUpperCase();
-  $('chatName').innerText=user.name||user.email;
-  const statusColor=user.customStatus==='busy'?'var(--red)':user.customStatus==='away'?'#F5D07A':user.customStatus==='dnd'?'var(--red)':'var(--green)';
-  $('chatStatus').innerHTML=user.online?`<span style="color:${statusColor}">● ${getStatusLabel(user.customStatus||'online')}</span>`:`Last seen ${user.lastSeen?user.lastSeen.toDate().toLocaleString():'recently'}`;
-  const fl=meData?.following||[];const fBtn=$('followHdrBtn');fBtn.style.display='flex';
-  fBtn.innerText=fl.includes(user.uid)?'✅':'➕';fBtn.title=fl.includes(user.uid)?'Unfollow':'Follow';
-  fBtn.onclick=async()=>{const fl2=meData?.following||[];if(fl2.includes(user.uid)){await unfollowUser(user.uid);fBtn.innerText='➕';}else{await followUser(user.uid);fBtn.innerText='✅';}};
-  document.querySelectorAll('.ci[data-uid]').forEach(el=>el.classList.toggle('active',el.dataset.uid===user.uid));
-  const msgsRef=collection(db,'chats',curRoomId,'messages');
-  unsubMsgs=onSnapshot(query(msgsRef,orderBy('time','asc')),snap=>renderMsgs(snap));
-  unsubTyp=onSnapshot(doc(db,'chats',curRoomId,'typing'),snap=>{
-    const d=snap.data()||{};$('typingName').innerText=user.name||'Someone';$('typingInd').classList.toggle('vis',d[user.uid]===true);
-  });
-  const unread=await getDocs(query(msgsRef,where('senderId','!=',me.uid),where('read','==',false)));
-  const batch=writeBatch(db);unread.forEach(d=>batch.update(d.ref,{read:true}));await batch.commit().catch(()=>{});
-  showChatOnMobile();
-}
-
-async function openGroupChat(group){
-  if(unsubMsgs)unsubMsgs();if(unsubTyp)unsubTyp();
-  curChatUser=group;curRoomId=`group_${group.id}`;isGroup=true;
-  exitSel();cancelReply();cancelEdit();
-  $('chatAv').className='av40 group-av';$('chatAv').innerText=(group.name||'G')[0].toUpperCase();
-  $('chatName').innerText=group.name;
-  const memberCount=(group.members||[]).length;
-  $('chatStatus').innerHTML=`👥 ${memberCount} member${memberCount!==1?'s':''}`;
-  $('followHdrBtn').$('chatWin').style.display = 'flex';
-  document.querySelectorAll('.ci[data-gid]').forEach(el=>el.classList.toggle('active',el.dataset.gid===group.id));
-  const msgsRef=collection(db,'chats',curRoomId,'messages');
-  unsubMsgs=onSnapshot(query(msgsRef,orderBy('time','asc')),snap=>renderMsgs(snap));
-  showChatOnMobile();
-}
-
-function showChatOnMobile() {
-  if (window.innerWidth <= 768) {
-    const sidebar = $('sidebar');
-    const chatWin = $('chatWin');
-    
-    sidebar.classList.remove('open');
-    chatWin.classList.remove('hidden');
-    chatWin.style.display = 'flex';
-    chatWin.style.visibility = 'visible';
-    
-    $('mobileBackBtn').style.display = 'flex';
-    
-    // Force a reflow
-    chatWin.offsetHeight;
-    
-    // Scroll to the latest message
-    setTimeout(() => {
-      const msgs = $('msgsArea');
-      if (msgs) msgs.scrollTop = msgs.scrollHeight;
-    }, 150);
-  }
-}
-
-function getStatusLabel(s){return{online:'Online',busy:'Busy',away:'Away',dnd:'Do Not Disturb',trading:'Trading',offline:'Invisible'}[s]||'Online';}
-
-// ── RENDER MESSAGES ──
-function renderMsgs(snap){
-  const area=$('msgsArea');
-  if(snap.empty){
-    const n=curChatUser;
-    area.innerHTML=`<div class="empty-chat"><div class="empty-ico">${isGroup?'👥':'👋'}</div><div class="empty-h">Start the conversation</div><div class="empty-p">Say hello to ${esc(n.name||n.email||'')}!</div></div>`;
-    return;
-  }
-  const wasAtBottom=area.scrollHeight-area.scrollTop-area.clientHeight<80;
-  let html='',lastDate='';
-  snap.forEach(ds=>{
-    const d=ds.data(),id=ds.id;
-    if(d.deletedFor?.[me.uid])return;
-    const isMe=d.senderId===me.uid,side=isMe?'r':'l';
-    const dl=fmtDate(d.time);if(dl&&dl!==lastDate){html+=`<div class="date-div">${dl}</div>`;lastDate=dl;}
-    let body='';
-    if(d.replyTo)body+=`<div class="msg-quote">↩ ${esc(d.replyTo.text?.slice(0,80)||'Attachment')}</div>`;
-    if(d.forwarded)body+=`<div class="msg-fwd-label">↗ Forwarded</div>`;
-    if(d.deleted){body+=`<em style="opacity:.4;font-size:12px">🚫 Message deleted</em>`;}
-    else{
-      if(d.text){const linked=esc(d.text).replace(/(https?:\/\/[^\s]+)/g,`<a href="$1" target="_blank" rel="noopener" style="color:${isMe?'rgba(255,255,255,0.7)':'var(--accent)'}">$1</a>`);body+=`<div>${linked}</div>`;}
-      if(d.fileUrl){
-        if(d.fileType?.startsWith('image/'))body+=`<div class="msg-media"><img src="${d.fileUrl}" alt="img" class="lb-trigger" data-src="${d.fileUrl}" loading="lazy"></div>`;
-        else if(d.fileType?.startsWith('video/'))body+=`<div class="msg-media"><video controls src="${d.fileUrl}" style="max-width:200px;border-radius:10px;display:block;margin-top:6px" playsinline></video></div>`;
-        else if(d.fileType?.startsWith('audio/'))body+=`<div class="msg-media"><audio controls src="${d.fileUrl}" style="max-width:190px;margin-top:6px;display:block"></audio></div>`;
-        else body+=`<div class="msg-media"><a href="${d.fileUrl}" target="_blank" class="msg-file" download="${d.fileName||'file'}"><span class="msg-file-ico">${fileIcon(d.fileType)}</span><div class="msg-file-info"><span class="msg-file-name">${esc(d.fileName||'File')}</span><span class="msg-file-size">${fileSize(d.fileSize||0)}</span></div></a></div>`;
-      }
+    const flrs = meData?.followers || [];
+    let list = allUsers.filter(u => flrs.includes(u.uid));
+    if (term) list = list.filter(u => (u.name || '').toLowerCase().includes(term));
+    if (!list.length) {
+      scroll.innerHTML = `<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No followers yet.</div>`;
+      return;
     }
-    let reacts='';
-    if(d.reactions&&Object.keys(d.reactions).length){
-      const grp={};Object.entries(d.reactions).forEach(([uid,emoji])=>{grp[emoji]=grp[emoji]||[];grp[emoji].push(uid);});
-      reacts=`<div class="reactions">${Object.entries(grp).map(([e,uids])=>`<span class="rbubble ${uids.includes(me.uid)?'mine':''}" data-mid="${id}" data-emoji="${e}">${e}<span class="rcount">${uids.length>1?uids.length:''}</span></span>`).join('')}</div>`;
-    }
-    const tick=isMe&&showReceipts?`<span class="tick ${d.read?'rd':''}">✓✓</span>`:'';
-    const edited=d.edited?`<span class="edited-tag">(edited)</span>`:'';
-    const pin=d.pinned?`<span>📌</span>`:'';
-    const senderLabel=isGroup&&!isMe?`<div style="font-size:10px;color:var(--accent);font-weight:700;margin-bottom:3px">${esc(d.senderName||'')}</div>`:'';
-    html+=`<div class="mw ${side}" data-msgid="${id}"><div class="mrow"><div class="sel-chk ${selMsgs.has(id)?'on':''}" data-mid="${id}">${selMsgs.has(id)?'✓':''}</div><div class="msg ${side}" data-msgid="${id}" data-sid="${d.senderId}">${senderLabel}${body}</div></div>${reacts}<div class="msg-meta">${pin}<span>${fmtTime(d.time)}</span>${edited}${tick}</div></div>`;
-  });
-  area.innerHTML=html;
-  if(wasAtBottom)area.scrollTop=area.scrollHeight;
-  bindMsgEvents();
-}
-
-function bindMsgEvents(){
-  $('msgsArea').querySelectorAll('.msg').forEach(el=>{
-    el.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();openCtx(e,el.dataset.msgid,el.dataset.sid===me.uid);});
-    el.addEventListener('click',e=>{if(selMode){e.stopPropagation();toggleSel(el.dataset.msgid);}});
-    let lt;
-    el.addEventListener('touchstart',()=>{lt=setTimeout(()=>openCtx({clientX:window.innerWidth/2,clientY:window.innerHeight*.4},el.dataset.msgid,el.dataset.sid===me.uid),600);},{passive:true});
-    el.addEventListener('touchend',()=>clearTimeout(lt),{passive:true});
-    el.addEventListener('touchmove',()=>clearTimeout(lt),{passive:true});
-  });
-  $('msgsArea').querySelectorAll('.sel-chk').forEach(el=>{el.addEventListener('click',e=>{e.stopPropagation();toggleSel(el.dataset.mid);});});
-  $('msgsArea').querySelectorAll('.lb-trigger').forEach(el=>{el.addEventListener('click',()=>{if(!selMode){$('lbImg').src=el.dataset.src;$('lbDl').href=el.dataset.src;$('lightbox').classList.add('open');}});});
-  $('msgsArea').querySelectorAll('.rbubble').forEach(el=>{el.addEventListener('click',()=>toggleReact(el.dataset.mid,el.dataset.emoji));});
-}
-
-// ── CONTEXT MENU ──
-function openCtx(e,msgId,isMe2){
-  ctxMsgId=msgId;ctxIsMe=isMe2;
-  const menu=$('ctxMenu');
-  $('ctxEdit').style.display=isMe2?'flex':'none';
-  $('ctxDelAll').style.display=isMe2?'flex':'none';
-  const menuW=200,menuH=340;
-  const x=Math.min(e.clientX||window.innerWidth/2,window.innerWidth-menuW-8);
-  const y=Math.min(e.clientY||window.innerHeight/2,window.innerHeight-menuH-8);
-  menu.style.left=Math.max(8,x)+'px';menu.style.top=Math.max(8,y)+'px';
-  menu.classList.add('vis');
-}
-function closeCtx(){$('ctxMenu').classList.remove('vis');}
-function setupCtx(){
-  $('quickReact').querySelectorAll('.ce').forEach(el=>{el.onclick=e=>{e.stopPropagation();toggleReact(ctxMsgId,el.dataset.emoji);closeCtx();};});
-  $('ctxReply').onclick=()=>{startReply(ctxMsgId);closeCtx();};
-  $('ctxCopy').onclick=()=>{copyMsg(ctxMsgId);closeCtx();};
-  $('ctxEdit').onclick=()=>{startEdit(ctxMsgId);closeCtx();};
-  $('ctxFwd').onclick=()=>{fwdMsg(ctxMsgId);closeCtx();};
-  $('ctxPin').onclick=()=>{pinMsg(ctxMsgId);closeCtx();};
-  $('ctxSave').onclick=()=>{saveToVault(ctxMsgId);closeCtx();};
-  $('ctxSel').onclick=()=>{enterSel();toggleSel(ctxMsgId);closeCtx();};
-  $('ctxDel').onclick=()=>{delMsg(ctxMsgId,false);closeCtx();};
-  $('ctxDelAll').onclick=()=>{delMsg(ctxMsgId,true);closeCtx();};
-}
-document.addEventListener('click',()=>{closeCtx();$('emojiPicker').classList.remove('vis');});
-
-// ── MSG ACTIONS ──
-function startReply(id){
-  const el=document.querySelector(`.msg[data-msgid="${id}"]`);if(!el)return;
-  replyTo={id,text:el.innerText.slice(0,80)};
-  $('replyText').innerText=replyTo.text;$('replyBar').classList.add('vis');$('msgInput').focus();
-}
-function cancelReply(){replyTo=null;$('replyBar').classList.remove('vis');}
-$('cancelReplyBtn').onclick=cancelReply;
-async function startEdit(id){
-  if(!curRoomId)return;
-  const s=await getDoc(doc(db,'chats',curRoomId,'messages',id));
-  if(!s.exists()||!s.data().text){toast('Can only edit text messages');return;}
-  editId=id;$('msgInput').value=s.data().text;autoResizeTextarea($('msgInput'));$('editBar').classList.add('vis');$('msgInput').focus();
-}
-function cancelEdit(){editId=null;$('msgInput').value='';$('editBar').classList.remove('vis');autoResizeTextarea($('msgInput'));}
-$('cancelEditBtn').onclick=cancelEdit;
-async function copyMsg(id){
-  if(!curRoomId)return;
-  const s=await getDoc(doc(db,'chats',curRoomId,'messages',id));
-  if(s.exists())navigator.clipboard?.writeText(s.data().text||'').then(()=>toast('Copied 📋'));
-}
-async function pinMsg(id){
-  if(!curRoomId)return;
-  const ref2=doc(db,'chats',curRoomId,'messages',id);const s=await getDoc(ref2);
-  if(s.exists()){await updateDoc(ref2,{pinned:!s.data().pinned});toast(s.data().pinned?'Unpinned':'Pinned 📌');}
-}
-async function fwdMsg(id){
-  if(!curRoomId)return;
-  const s=await getDoc(doc(db,'chats',curRoomId,'messages',id));if(!s.exists())return;
-  const target=prompt('Forward to (enter user email):');if(!target)return;
-  const tu=allUsers.find(u=>u.email===target);if(!tu){toast('User not found','var(--red)');return;}
-  const nr=roomId(me.uid,tu.uid);
-  await addDoc(collection(db,'chats',nr,'messages'),{text:s.data().text||null,fileUrl:s.data().fileUrl||null,fileName:s.data().fileName||null,fileType:s.data().fileType||null,fileSize:s.data().fileSize||null,senderId:me.uid,senderName:meData.name,time:serverTimestamp(),forwarded:true,reactions:{},deleted:false,read:false});
-  toast('Forwarded ↗️');
-}
-async function delMsg(id,forAll){
-  if(!curRoomId)return;
-  const ref2=doc(db,'chats',curRoomId,'messages',id);
-  if(forAll)await updateDoc(ref2,{deleted:true,text:null,fileUrl:null});
-  else await updateDoc(ref2,{[`deletedFor.${me.uid}`]:true});
-  toast(forAll?'Deleted for everyone':'Deleted for you','var(--red)');
-}
-async function toggleReact(msgId,emoji){
-  if(!curRoomId||!msgId)return;
-  const ref2=doc(db,'chats',curRoomId,'messages',msgId);const s=await getDoc(ref2);if(!s.exists())return;
-  const rx=s.data().reactions||{};
-  if(rx[me.uid]===emoji)delete rx[me.uid];else rx[me.uid]=emoji;
-  await updateDoc(ref2,{reactions:rx});
-}
-async function saveToVault(id){
-  if(!curRoomId)return;
-  const s=await getDoc(doc(db,'chats',curRoomId,'messages',id));
-  if(!s.exists()||!s.data().fileUrl){toast('No media to save');return;}
-  const d=s.data();
-  const item={url:d.fileUrl,name:d.fileName||'file',type:d.fileType||'',size:d.fileSize||0,savedAt:new Date().toISOString()};
-  const stored=JSON.parse(localStorage.getItem('vault')||'{"photos":[],"videos":[],"audio":[],"files":[]}');
-  if(d.fileType?.startsWith('image/'))stored.photos.push(item);
-  else if(d.fileType?.startsWith('video/'))stored.videos.push(item);
-  else if(d.fileType?.startsWith('audio/'))stored.audio.push(item);
-  else stored.files.push(item);
-  localStorage.setItem('vault',JSON.stringify(stored));vaultData=stored;
-  toast('Saved to Vault 💾','var(--green)');$('vaultDot').style.display='block';
-}
-
-// ── SELECTION ──
-function enterSel(){selMode=true;$('msgsArea').classList.add('select-mode');$('selBar').classList.add('vis');}
-function exitSel(){selMode=false;selMsgs.clear();$('msgsArea').classList.remove('select-mode');$('selBar').classList.remove('vis');$('selCount').innerText='0 selected';}
-function toggleSel(id){
-  if(!selMode)enterSel();
-  if(selMsgs.has(id))selMsgs.delete(id);else selMsgs.add(id);
-  $('selCount').innerText=`${selMsgs.size} selected`;
-  const chk=document.querySelector(`.sel-chk[data-mid="${id}"]`);
-  if(chk){chk.classList.toggle('on',selMsgs.has(id));chk.innerText=selMsgs.has(id)?'✓':'';}
-}
-function setupSelBtns(){
-  $('selectBtn').onclick=enterSel;
-  $('cancelSelBtn').onclick=exitSel;
-  $('delSelBtn').onclick=async()=>{
-    if(!selMsgs.size)return;if(!confirm(`Delete ${selMsgs.size} message(s)?`))return;
-    const batch=writeBatch(db);selMsgs.forEach(id=>batch.update(doc(db,'chats',curRoomId,'messages',id),{deleted:true,text:null,fileUrl:null}));
-    await batch.commit();toast(`${selMsgs.size} deleted`,'var(--red)');exitSel();
-  };
-  $('fwdSelBtn').onclick=async()=>{
-    if(!selMsgs.size)return;const target=prompt('Forward to (email):');if(!target)return;
-    const tu=allUsers.find(u=>u.email===target);if(!tu){toast('User not found','var(--red)');return;}
-    const nr=roomId(me.uid,tu.uid);
-    for(const id of selMsgs){const s=await getDoc(doc(db,'chats',curRoomId,'messages',id));if(s.exists())await addDoc(collection(db,'chats',nr,'messages'),{text:s.data().text||null,fileUrl:s.data().fileUrl||null,fileName:s.data().fileName||null,fileType:s.data().fileType||null,senderId:me.uid,senderName:meData.name,time:serverTimestamp(),forwarded:true,reactions:{},deleted:false,read:false});}
-    toast(`${selMsgs.size} forwarded!`);exitSel();
-  };
-}
-
-// ── HEADER BUTTONS ──
-function setupHdrBtns(){
-  $('clearChatBtn').onclick=async()=>{
-    if(!curRoomId)return;if(!confirm('Clear all messages for you?'))return;
-    const s=await getDocs(collection(db,'chats',curRoomId,'messages'));
-    const batch=writeBatch(db);s.forEach(d=>batch.update(d.ref,{[`deletedFor.${me.uid}`]:true}));
-    await batch.commit();toast('Chat cleared');
-  };
-  $('searchMsgBtn').onclick=async()=>{
-    if(!curRoomId)return;const term=prompt('Search in this chat:');if(!term)return;
-    const s=await getDocs(collection(db,'chats',curRoomId,'messages'));
-    const results=[];s.forEach(d=>{if((d.data().text||'').toLowerCase().includes(term.toLowerCase()))results.push(d.data().text);});
-    if(!results.length)toast('No results');else alert(`Found ${results.length} result(s):\n\n${results.slice(0,5).join('\n—\n')}`);
-  };
-  $('vaultHdrBtn').onclick=()=>openVault('photos');
-}
-
-// ── TEXTAREA AUTO-RESIZE ──
-function autoResizeTextarea(ta){
-  ta.style.height='22px';
-  const sh=ta.scrollHeight;
-  ta.style.height=Math.min(sh,110)+'px';
-}
-
-// ── SEND ──
-async function sendMessage(){
-  const ta=$('msgInput');const text=ta.value.trim();
-  if(!curRoomId){toast('Select a chat first');return;}
-  if(!text&&!editId)return;
-  if(editId){
-    await updateDoc(doc(db,'chats',curRoomId,'messages',editId),{text,edited:true});
-    toast('Updated ✓');cancelEdit();return;
+    scroll.innerHTML = list.map(u => ciHTML(u)).join('');
+    bindCIs();
+    list.forEach(u => attachPreview(u));
   }
-  const payload={text,senderId:me.uid,senderName:meData.name||me.email,time:serverTimestamp(),reactions:{},deleted:false,edited:false,pinned:false,read:false};
-  if(replyTo){payload.replyTo=replyTo;cancelReply();}
-  ta.value='';autoResizeTextarea(ta);
-  await addDoc(collection(db,'chats',curRoomId,'messages'),payload);
-  playSound();
 }
 
-// ── INPUT — MOBILE FIXED ──
-function setupInput(){
-  const ta=$('msgInput');
-
-  // Auto-resize
-  ta.addEventListener('input',()=>{
-    autoResizeTextarea(ta);
-    if(!curRoomId)return;
-    const td=doc(db,'chats',curRoomId,'typing');
-    updateDoc(td,{[me.uid]:true}).catch(()=>setDoc(td,{[me.uid]:true}));
-    clearTimeout(typingTimer);typingTimer=setTimeout(()=>updateDoc(td,{[me.uid]:false}).catch(()=>{}),2000);
+function ciHTML(u) {
+  return `<div class="ci" data-uid="${u.uid}"><div class="av40">${(u.name || '?')[0].toUpperCase()}${u.online ? '<div class="on-dot"></div>' : ''}</div><div class="ci-info"><div class="ci-top"><span class="ci-name">${esc(u.name || u.email)}</span><span class="ci-time" id="t-${u.uid}"></span></div><div class="ci-prev" id="p-${u.uid}">${u.online ? '<span style="color:var(--green)">●</span> Online' : 'Tap to chat'}</div></div></div>`;
+}
+function groupCiHTML(g) {
+  return `<div class="ci" data-gid="${g.id}"><div class="av40 group-av">${(g.name || 'G')[0].toUpperCase()}</div><div class="ci-info"><div class="ci-top"><span class="ci-name">${esc(g.name)}</span><span class="ci-time" id="tg-${g.id}"></span></div><div class="ci-prev" id="pg-${g.id}">${(g.members || []).length} members</div></div></div>`;
+}
+function bindCIs() {
+  document.querySelectorAll('.ci[data-uid]').forEach(el => {
+    el.onclick = () => {
+      const u = allUsers.find(u => u.uid === el.dataset.uid);
+      if (u) openChat(u);
+    };
   });
-
-  // Enter to send (desktop only — on mobile Enter always adds newline for UX)
-  ta.addEventListener('keydown',e=>{
-    if(e.key==='Enter'&&!e.shiftKey&&enterSend&&window.innerWidth>768){
-      e.preventDefault();sendMessage();
-    }
-  });
-
-  $('sendBtn').onclick=()=>sendMessage();
-
-  // iOS: when keyboard appears, scroll to bottom
-  ta.addEventListener('focus',()=>{
-    setTimeout(()=>{
-      $('msgsArea').scrollTop=$('msgsArea').scrollHeight;
-    },350);
+}
+function bindGroupCIs() {
+  document.querySelectorAll('.ci[data-gid]').forEach(el => {
+    el.onclick = () => {
+      const g = myGroups.find(g => g.id === el.dataset.gid);
+      if (g) openGroupChat(g);
+    };
   });
 }
 
-// ── FILE ATTACH ──
-function setupFile(){
-  const fi=document.createElement('input');
-  fi.type='file';fi.accept='image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.zip,.rar,.mp3,.mp4,.wav,.ogg';fi.multiple=true;
-  fi.onchange=async()=>{for(const f of fi.files)await uploadFile(f);fi.value='';};
-  $('attachBtn').onclick=()=>fi.click();
-}
-async function uploadFile(file){
-  if(!curRoomId){toast('Select a chat first');return;}
-  if(file.size>50*1024*1024){toast('Max file size: 50MB','var(--red)');return;}
-  const path=`chat_files/${curRoomId}/${Date.now()}_${file.name}`;
-  const sr2=sRef(storage,path);const task=uploadBytesResumable(sr2,file);
-  $('uploadProg').classList.add('vis');
-  task.on('state_changed',
-    s=>{$('uploadFill').style.width=(s.bytesTransferred/s.totalBytes*100)+'%';},
-    err=>{toast('Upload failed: '+err.message,'var(--red)');$('uploadProg').classList.remove('vis');},
-    async()=>{
-      const url=await getDownloadURL(task.snapshot.ref);
-      await addDoc(collection(db,'chats',curRoomId,'messages'),{text:null,fileUrl:url,fileName:file.name,fileType:file.type,fileSize:file.size,senderId:me.uid,senderName:meData.name,time:serverTimestamp(),reactions:{},deleted:false,read:false});
-      $('uploadProg').classList.remove('vis');$('uploadFill').style.width='0';toast('File sent ✓');
-      if(localStorage.getItem('th_autoSave')==='true'){
-        const item={url,name:file.name,type:file.type,size:file.size,savedAt:new Date().toISOString()};
-        const stored=JSON.parse(localStorage.getItem('vault')||'{"photos":[],"videos":[],"audio":[],"files":[]}');
-        if(file.type.startsWith('image/'))stored.photos.push(item);
-        else if(file.type.startsWith('video/'))stored.videos.push(item);
-        else if(file.type.startsWith('audio/'))stored.audio.push(item);
-        else stored.files.push(item);
-        localStorage.setItem('vault',JSON.stringify(stored));vaultData=stored;
+function attachPreview(u) {
+  const rid = roomId(me.uid, u.uid);
+  onSnapshot(
+    query(collection(db, 'chats', rid, 'messages'), orderBy('time', 'desc')),
+    snap => {
+      if (snap.empty) return;
+      const d = snap.docs[0].data();
+      let prev = d.text || (d.fileUrl ? `${fileIcon(d.fileType)} Attachment` : '');
+      if (d.deleted) prev = '🚫 Deleted';
+      if (prev.length > 36) prev = prev.slice(0, 33) + '…';
+      const pe = $(`p-${u.uid}`), te = $(`t-${u.uid}`);
+      if (pe) pe.innerHTML = prev;
+      if (te && d.time) {
+        try { te.innerText = d.time.toDate().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); } catch {}
       }
     }
   );
 }
 
-// ── VOICE ──
-function setupVoice(){
-  $('voiceBtn').onclick=async()=>{
-    if(!curRoomId){toast('Select a chat first');return;}
-    if(!isRec){
-      try{
-        const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-        mediaRec=new MediaRecorder(stream);audioChunks=[];
-        mediaRec.ondataavailable=e=>audioChunks.push(e.data);
-        mediaRec.onstop=async()=>{
-          const blob=new Blob(audioChunks,{type:'audio/webm'});
-          await uploadFile(new File([blob],`voice_${Date.now()}.webm`,{type:'audio/webm'}));
-          stream.getTracks().forEach(t=>t.stop());
+function setupSearch() {
+  $('searchInput').oninput = () => renderSidebar(curTab);
+}
+
+// ── DISCOVER ──
+function setupDiscover() {
+  $('discoverBtn').onclick = () => { renderDiscover(); $('discoverModal').classList.add('open'); };
+  $('closeDiscover').onclick = () => $('discoverModal').classList.remove('open');
+  $('discoverModal').addEventListener('click', e => { if (e.target === $('discoverModal')) $('discoverModal').classList.remove('open'); });
+  $('discoverSearch').oninput = () => renderDiscover($('discoverSearch').value);
+}
+
+function renderDiscover(term = '') {
+  const list = $('discoverList'), fl = meData?.following || [];
+  let users = allUsers;
+  if (term) users = users.filter(u => (u.name || '').toLowerCase().includes(term.toLowerCase()) || (u.email || '').toLowerCase().includes(term.toLowerCase()));
+  if (!users.length) {
+    list.innerHTML = '<div style="color:var(--muted);padding:20px;text-align:center">No traders found</div>';
+    return;
+  }
+  list.innerHTML = users.map(u => {
+    const isF = fl.includes(u.uid);
+    return `<div class="user-row2"><div class="av40" style="width:38px;height:38px;font-size:14px;border-radius:10px;flex-shrink:0">${(u.name || '?')[0].toUpperCase()}${u.online ? '<div class="on-dot"></div>' : ''}</div><div class="ur-info"><div class="ur-name">${esc(u.name || u.email)}</div><div class="ur-email">${esc(u.email || '')}</div><div class="ur-status">${u.online ? '<span style="color:var(--green)">● Online</span>' : '<span style="color:var(--muted)">● Offline</span>'}</div></div><button class="fl-btn ${isF ? 'following' : ''}" data-uid="${u.uid}">${isF ? 'Following' : '+ Follow'}</button></div>`;
+  }).join('');
+
+  list.querySelectorAll('.fl-btn').forEach(btn => {
+    btn.onclick = async () => {
+      const uid = btn.dataset.uid, fl2 = meData?.following || [];
+      if (fl2.includes(uid)) {
+        await unfollowUser(uid);
+        btn.classList.remove('following');
+        btn.innerText = '+ Follow';
+      } else {
+        await followUser(uid);
+        btn.classList.add('following');
+        btn.innerText = 'Following';
+      }
+    };
+  });
+}
+
+async function followUser(uid) {
+  await updateDoc(doc(db, 'users', me.uid), {following: arrayUnion(uid)});
+  await updateDoc(doc(db, 'users', uid), {followers: arrayUnion(me.uid)});
+  meData = (await getDoc(doc(db, 'users', me.uid))).data();
+  toast('Now following! 🎉', 'var(--green)');
+  renderSidebar(curTab);
+}
+
+async function unfollowUser(uid) {
+  await updateDoc(doc(db, 'users', me.uid), {following: arrayRemove(uid)});
+  await updateDoc(doc(db, 'users', uid), {followers: arrayRemove(me.uid)});
+  meData = (await getDoc(doc(db, 'users', me.uid))).data();
+  toast('Unfollowed');
+  renderSidebar(curTab);
+}
+
+// ── GROUP MODAL ──
+function setupGroupModal() {
+  $('newGroupBtn').onclick = () => {
+    renderMemberList();
+    $('groupModal').classList.add('open');
+    $('groupName').value = '';
+    $('groupDesc').value = '';
+    groupMembers.clear();
+    updateSelMemberCount();
+  };
+  $('closeGroup').onclick = () => $('groupModal').classList.remove('open');
+  $('groupModal').addEventListener('click', e => { if (e.target === $('groupModal')) $('groupModal').classList.remove('open'); });
+  $('createGroupBtn').onclick = createGroup;
+}
+
+function renderMemberList() {
+  const ml = $('memberList');
+  ml.innerHTML = allUsers.map(u =>
+    `<div class="usr-sel ${groupMembers.has(u.uid) ? 'sel' : ''}" data-uid="${u.uid}"><div class="usr-sel-chk">${groupMembers.has(u.uid) ? '✓' : ''}</div><div class="av" style="width:32px;height:32px;font-size:12px;border-radius:8px;flex-shrink:0">${(u.name || '?')[0].toUpperCase()}</div><div><div class="usr-sel-name">${esc(u.name || u.email)}</div><div class="usr-sel-email">${esc(u.email || '')}</div></div></div>`
+  ).join('');
+
+  $('memberList').querySelectorAll('.usr-sel').forEach(el => {
+    el.onclick = () => {
+      const uid = el.dataset.uid;
+      if (groupMembers.has(uid)) {
+        groupMembers.delete(uid);
+        el.classList.remove('sel');
+        el.querySelector('.usr-sel-chk').innerText = '';
+      } else {
+        groupMembers.add(uid);
+        el.classList.add('sel');
+        el.querySelector('.usr-sel-chk').innerText = '✓';
+      }
+      updateSelMemberCount();
+    };
+  });
+}
+
+function updateSelMemberCount() {
+  $('selMemberCount').innerText = `${groupMembers.size} member${groupMembers.size !== 1 ? 's' : ''} selected`;
+}
+
+async function createGroup() {
+  const name = $('groupName').value.trim();
+  if (!name) { toast('Please enter a group name', 'var(--red)'); return; }
+  if (groupMembers.size < 1) { toast('Add at least 1 member', 'var(--red)'); return; }
+  $('createGroupBtn').disabled = true;
+  $('createGroupBtn').innerText = 'Creating…';
+  try {
+    const members = [me.uid, ...groupMembers];
+    const gRef = await addDoc(collection(db, 'groups'), {
+      name, description: $('groupDesc').value.trim(),
+      members, createdBy: me.uid,
+      createdAt: serverTimestamp(),
+      avatar: name[0].toUpperCase()
+    });
+    await loadGroups();
+    renderSidebar('groups');
+    document.querySelectorAll('.tb').forEach(b => b.classList.remove('act'));
+    document.querySelector('.tb[data-tab="groups"]').classList.add('act');
+    curTab = 'groups';
+    $('groupModal').classList.remove('open');
+    toast(`Group "${name}" created! 🎉`, 'var(--green)');
+    const g = myGroups.find(g => g.id === gRef.id);
+    if (g) openGroupChat(g);
+  } catch (e) {
+    toast('Failed: ' + e.message, 'var(--red)');
+  }
+  $('createGroupBtn').disabled = false;
+  $('createGroupBtn').innerText = '🚀 Create Group';
+}
+
+// ── OPEN CHAT ──
+async function openChat(user) {
+  if (unsubMsgs) unsubMsgs();
+  if (unsubTyp) unsubTyp();
+  curChatUser = user;
+  curRoomId = roomId(me.uid, user.uid);
+  isGroup = false;
+  exitSel();
+  cancelReply();
+  cancelEdit();
+
+  $('chatAv').className = 'av40';
+  $('chatAv').innerText = (user.name || '?')[0].toUpperCase();
+  $('chatName').innerText = user.name || user.email;
+
+  const statusColor = user.customStatus === 'busy' ? 'var(--red)' :
+    user.customStatus === 'away' ? '#F5D07A' :
+    user.customStatus === 'dnd' ? 'var(--red)' : 'var(--green)';
+  $('chatStatus').innerHTML = user.online
+    ? `<span style="color:${statusColor}">● ${getStatusLabel(user.customStatus || 'online')}</span>`
+    : `Last seen ${user.lastSeen ? user.lastSeen.toDate().toLocaleString() : 'recently'}`;
+
+  const fl = meData?.following || [];
+  const fBtn = $('followHdrBtn');
+  fBtn.style.display = 'flex';
+  fBtn.innerText = fl.includes(user.uid) ? '✅' : '➕';
+  fBtn.title = fl.includes(user.uid) ? 'Unfollow' : 'Follow';
+  fBtn.onclick = async () => {
+    const fl2 = meData?.following || [];
+    if (fl2.includes(user.uid)) { await unfollowUser(user.uid); fBtn.innerText = '➕'; }
+    else { await followUser(user.uid); fBtn.innerText = '✅'; }
+  };
+
+  document.querySelectorAll('.ci[data-uid]').forEach(el => el.classList.toggle('active', el.dataset.uid === user.uid));
+  document.querySelectorAll('.ci[data-gid]').forEach(el => el.classList.remove('active'));
+
+  const msgsRef = collection(db, 'chats', curRoomId, 'messages');
+  unsubMsgs = onSnapshot(query(msgsRef, orderBy('time', 'asc')), snap => renderMsgs(snap));
+  unsubTyp = onSnapshot(doc(db, 'chats', curRoomId, 'typing'), snap => {
+    const d = snap.data() || {};
+    $('typingName').innerText = user.name || 'Someone';
+    $('typingInd').classList.toggle('vis', d[user.uid] === true);
+  });
+
+  // Mark messages as read
+  try {
+    const unread = await getDocs(query(msgsRef, where('senderId', '!=', me.uid), where('read', '==', false)));
+    const batch = writeBatch(db);
+    unread.forEach(d => batch.update(d.ref, {read: true}));
+    await batch.commit();
+  } catch {}
+
+  showChatOnMobile();
+}
+
+async function openGroupChat(group) {
+  if (unsubMsgs) unsubMsgs();
+  if (unsubTyp) unsubTyp();
+  curChatUser = group;
+  curRoomId = `group_${group.id}`;
+  isGroup = true;
+  exitSel();
+  cancelReply();
+  cancelEdit();
+
+  $('chatAv').className = 'av40 group-av';
+  $('chatAv').innerText = (group.name || 'G')[0].toUpperCase();
+  $('chatName').innerText = group.name;
+  const memberCount = (group.members || []).length;
+  $('chatStatus').innerHTML = `👥 ${memberCount} member${memberCount !== 1 ? 's' : ''}`;
+
+  // Hide follow button for groups
+  $('followHdrBtn').style.display = 'none';
+
+  document.querySelectorAll('.ci[data-gid]').forEach(el => el.classList.toggle('active', el.dataset.gid === group.id));
+  document.querySelectorAll('.ci[data-uid]').forEach(el => el.classList.remove('active'));
+
+  const msgsRef = collection(db, 'chats', curRoomId, 'messages');
+  unsubMsgs = onSnapshot(query(msgsRef, orderBy('time', 'asc')), snap => renderMsgs(snap));
+
+  showChatOnMobile();
+}
+
+// ── MOBILE CHAT SHOW/HIDE ──
+function showChatOnMobile() {
+  if (isMobile()) {
+    // Slide sidebar out, slide chat in
+    $('sidebar').classList.remove('open');
+    const chatWin = $('chatWin');
+    chatWin.classList.remove('hidden');
+    chatWin.classList.add('mobile-open');
+    $('mobileBackBtn').style.display = 'flex';
+
+    // Scroll to bottom after render
+    setTimeout(() => {
+      const msgs = $('msgsArea');
+      if (msgs) msgs.scrollTop = msgs.scrollHeight;
+    }, 200);
+  }
+}
+
+function hideChatOnMobile() {
+  if (isMobile()) {
+    $('sidebar').classList.add('open');
+    const chatWin = $('chatWin');
+    chatWin.classList.remove('mobile-open');
+    chatWin.classList.add('hidden');
+    $('mobileBackBtn').style.display = 'none';
+  }
+}
+
+function getStatusLabel(s) {
+  return {online:'Online', busy:'Busy', away:'Away', dnd:'Do Not Disturb', trading:'Trading', offline:'Invisible'}[s] || 'Online';
+}
+
+// ── RENDER MESSAGES ──
+function renderMsgs(snap) {
+  const area = $('msgsArea');
+  if (snap.empty) {
+    const n = curChatUser;
+    area.innerHTML = `<div class="empty-chat"><div class="empty-ico">${isGroup ? '👥' : '👋'}</div><div class="empty-h">Start the conversation</div><div class="empty-p">Say hello to ${esc(n.name || n.email || '')}!</div></div>`;
+    return;
+  }
+
+  const wasAtBottom = area.scrollHeight - area.scrollTop - area.clientHeight < 80;
+  let html = '', lastDate = '';
+
+  snap.forEach(ds => {
+    const d = ds.data(), id = ds.id;
+    if (d.deletedFor?.[me.uid]) return;
+    const isMe = d.senderId === me.uid, side = isMe ? 'r' : 'l';
+    const dl = fmtDate(d.time);
+    if (dl && dl !== lastDate) { html += `<div class="date-div">${dl}</div>`; lastDate = dl; }
+
+    let body = '';
+    if (d.replyTo) body += `<div class="msg-quote">↩ ${esc(d.replyTo.text?.slice(0, 80) || 'Attachment')}</div>`;
+    if (d.forwarded) body += `<div class="msg-fwd-label">↗ Forwarded</div>`;
+
+    if (d.deleted) {
+      body += `<em style="opacity:.4;font-size:12px">🚫 Message deleted</em>`;
+    } else {
+      if (d.text) {
+        const linked = esc(d.text).replace(/(https?:\/\/[^\s]+)/g, `<a href="$1" target="_blank" rel="noopener" style="color:${isMe ? 'rgba(255,255,255,0.7)' : 'var(--accent)'}">$1</a>`);
+        body += `<div>${linked}</div>`;
+      }
+      if (d.fileUrl) {
+        if (d.fileType?.startsWith('image/'))
+          body += `<div class="msg-media"><img src="${d.fileUrl}" alt="img" class="lb-trigger" data-src="${d.fileUrl}" loading="lazy"></div>`;
+        else if (d.fileType?.startsWith('video/'))
+          body += `<div class="msg-media"><video controls src="${d.fileUrl}" style="max-width:200px;border-radius:10px;display:block;margin-top:6px" playsinline></video></div>`;
+        else if (d.fileType?.startsWith('audio/'))
+          body += `<div class="msg-media"><audio controls src="${d.fileUrl}" style="max-width:190px;margin-top:6px;display:block"></audio></div>`;
+        else
+          body += `<div class="msg-media"><a href="${d.fileUrl}" target="_blank" class="msg-file" download="${d.fileName || 'file'}"><span class="msg-file-ico">${fileIcon(d.fileType)}</span><div class="msg-file-info"><span class="msg-file-name">${esc(d.fileName || 'File')}</span><span class="msg-file-size">${fileSize(d.fileSize || 0)}</span></div></a></div>`;
+      }
+    }
+
+    let reacts = '';
+    if (d.reactions && Object.keys(d.reactions).length) {
+      const grp = {};
+      Object.entries(d.reactions).forEach(([uid, emoji]) => { grp[emoji] = grp[emoji] || []; grp[emoji].push(uid); });
+      reacts = `<div class="reactions">${Object.entries(grp).map(([e, uids]) => `<span class="rbubble ${uids.includes(me.uid) ? 'mine' : ''}" data-mid="${id}" data-emoji="${e}">${e}<span class="rcount">${uids.length > 1 ? uids.length : ''}</span></span>`).join('')}</div>`;
+    }
+
+    const tick = isMe && showReceipts ? `<span class="tick ${d.read ? 'rd' : ''}">✓✓</span>` : '';
+    const edited = d.edited ? `<span class="edited-tag">(edited)</span>` : '';
+    const pin = d.pinned ? `<span>📌</span>` : '';
+    const senderLabel = isGroup && !isMe ? `<div style="font-size:10px;color:var(--accent);font-weight:700;margin-bottom:3px">${esc(d.senderName || '')}</div>` : '';
+
+    html += `<div class="mw ${side}" data-msgid="${id}"><div class="mrow"><div class="sel-chk ${selMsgs.has(id) ? 'on' : ''}" data-mid="${id}">${selMsgs.has(id) ? '✓' : ''}</div><div class="msg ${side}" data-msgid="${id}" data-sid="${d.senderId}">${senderLabel}${body}</div></div>${reacts}<div class="msg-meta">${pin}<span>${fmtTime(d.time)}</span>${edited}${tick}</div></div>`;
+  });
+
+  area.innerHTML = html;
+  if (wasAtBottom) area.scrollTop = area.scrollHeight;
+  bindMsgEvents();
+}
+
+function bindMsgEvents() {
+  $('msgsArea').querySelectorAll('.msg').forEach(el => {
+    el.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      openCtx(e, el.dataset.msgid, el.dataset.sid === me.uid);
+    });
+    el.addEventListener('click', e => {
+      if (selMode) { e.stopPropagation(); toggleSel(el.dataset.msgid); }
+    });
+    let lt;
+    el.addEventListener('touchstart', () => {
+      lt = setTimeout(() => openCtx({clientX: window.innerWidth / 2, clientY: window.innerHeight * 0.4}, el.dataset.msgid, el.dataset.sid === me.uid), 600);
+    }, {passive: true});
+    el.addEventListener('touchend', () => clearTimeout(lt), {passive: true});
+    el.addEventListener('touchmove', () => clearTimeout(lt), {passive: true});
+  });
+  $('msgsArea').querySelectorAll('.sel-chk').forEach(el => {
+    el.addEventListener('click', e => { e.stopPropagation(); toggleSel(el.dataset.mid); });
+  });
+  $('msgsArea').querySelectorAll('.lb-trigger').forEach(el => {
+    el.addEventListener('click', () => {
+      if (!selMode) { $('lbImg').src = el.dataset.src; $('lbDl').href = el.dataset.src; $('lightbox').classList.add('open'); }
+    });
+  });
+  $('msgsArea').querySelectorAll('.rbubble').forEach(el => {
+    el.addEventListener('click', () => toggleReact(el.dataset.mid, el.dataset.emoji));
+  });
+}
+
+// ── CONTEXT MENU ──
+function openCtx(e, msgId, isMe2) {
+  ctxMsgId = msgId;
+  ctxIsMe = isMe2;
+  const menu = $('ctxMenu');
+  $('ctxEdit').style.display = isMe2 ? 'flex' : 'none';
+  $('ctxDelAll').style.display = isMe2 ? 'flex' : 'none';
+  const menuW = 200, menuH = 340;
+  const x = Math.min(e.clientX || window.innerWidth / 2, window.innerWidth - menuW - 8);
+  const y = Math.min(e.clientY || window.innerHeight / 2, window.innerHeight - menuH - 8);
+  menu.style.left = Math.max(8, x) + 'px';
+  menu.style.top = Math.max(8, y) + 'px';
+  menu.classList.add('vis');
+}
+function closeCtx() { $('ctxMenu').classList.remove('vis'); }
+
+function setupCtx() {
+  $('quickReact').querySelectorAll('.ce').forEach(el => {
+    el.onclick = e => { e.stopPropagation(); toggleReact(ctxMsgId, el.dataset.emoji); closeCtx(); };
+  });
+  $('ctxReply').onclick = () => { startReply(ctxMsgId); closeCtx(); };
+  $('ctxCopy').onclick = () => { copyMsg(ctxMsgId); closeCtx(); };
+  $('ctxEdit').onclick = () => { startEdit(ctxMsgId); closeCtx(); };
+  $('ctxFwd').onclick = () => { fwdMsg(ctxMsgId); closeCtx(); };
+  $('ctxPin').onclick = () => { pinMsg(ctxMsgId); closeCtx(); };
+  $('ctxSave').onclick = () => { saveToVault(ctxMsgId); closeCtx(); };
+  $('ctxSel').onclick = () => { enterSel(); toggleSel(ctxMsgId); closeCtx(); };
+  $('ctxDel').onclick = () => { delMsg(ctxMsgId, false); closeCtx(); };
+  $('ctxDelAll').onclick = () => { delMsg(ctxMsgId, true); closeCtx(); };
+}
+
+document.addEventListener('click', () => {
+  closeCtx();
+  $('emojiPicker').classList.remove('vis');
+});
+
+// ── MSG ACTIONS ──
+function startReply(id) {
+  const el = document.querySelector(`.msg[data-msgid="${id}"]`);
+  if (!el) return;
+  replyTo = {id, text: el.innerText.slice(0, 80)};
+  $('replyText').innerText = replyTo.text;
+  $('replyBar').classList.add('vis');
+  $('msgInput').focus();
+}
+function cancelReply() {
+  replyTo = null;
+  $('replyBar').classList.remove('vis');
+}
+$('cancelReplyBtn').onclick = cancelReply;
+
+async function startEdit(id) {
+  if (!curRoomId) return;
+  const s = await getDoc(doc(db, 'chats', curRoomId, 'messages', id));
+  if (!s.exists() || !s.data().text) { toast('Can only edit text messages'); return; }
+  editId = id;
+  $('msgInput').value = s.data().text;
+  autoResizeTextarea($('msgInput'));
+  $('editBar').classList.add('vis');
+  $('msgInput').focus();
+}
+function cancelEdit() {
+  editId = null;
+  $('msgInput').value = '';
+  $('editBar').classList.remove('vis');
+  autoResizeTextarea($('msgInput'));
+}
+$('cancelEditBtn').onclick = cancelEdit;
+
+async function copyMsg(id) {
+  if (!curRoomId) return;
+  const s = await getDoc(doc(db, 'chats', curRoomId, 'messages', id));
+  if (s.exists()) navigator.clipboard?.writeText(s.data().text || '').then(() => toast('Copied 📋'));
+}
+
+async function pinMsg(id) {
+  if (!curRoomId) return;
+  const ref2 = doc(db, 'chats', curRoomId, 'messages', id);
+  const s = await getDoc(ref2);
+  if (s.exists()) { await updateDoc(ref2, {pinned: !s.data().pinned}); toast(s.data().pinned ? 'Unpinned' : 'Pinned 📌'); }
+}
+
+async function fwdMsg(id) {
+  if (!curRoomId) return;
+  const s = await getDoc(doc(db, 'chats', curRoomId, 'messages', id));
+  if (!s.exists()) return;
+  const target = prompt('Forward to (enter user email):');
+  if (!target) return;
+  const tu = allUsers.find(u => u.email === target);
+  if (!tu) { toast('User not found', 'var(--red)'); return; }
+  const nr = roomId(me.uid, tu.uid);
+  await addDoc(collection(db, 'chats', nr, 'messages'), {
+    text: s.data().text || null, fileUrl: s.data().fileUrl || null,
+    fileName: s.data().fileName || null, fileType: s.data().fileType || null,
+    fileSize: s.data().fileSize || null, senderId: me.uid, senderName: meData.name,
+    time: serverTimestamp(), forwarded: true, reactions: {}, deleted: false, read: false
+  });
+  toast('Forwarded ↗️');
+}
+
+async function delMsg(id, forAll) {
+  if (!curRoomId) return;
+  const ref2 = doc(db, 'chats', curRoomId, 'messages', id);
+  if (forAll) await updateDoc(ref2, {deleted: true, text: null, fileUrl: null});
+  else await updateDoc(ref2, {[`deletedFor.${me.uid}`]: true});
+  toast(forAll ? 'Deleted for everyone' : 'Deleted for you', 'var(--red)');
+}
+
+async function toggleReact(msgId, emoji) {
+  if (!curRoomId || !msgId) return;
+  const ref2 = doc(db, 'chats', curRoomId, 'messages', msgId);
+  const s = await getDoc(ref2);
+  if (!s.exists()) return;
+  const rx = s.data().reactions || {};
+  if (rx[me.uid] === emoji) delete rx[me.uid];
+  else rx[me.uid] = emoji;
+  await updateDoc(ref2, {reactions: rx});
+}
+
+async function saveToVault(id) {
+  if (!curRoomId) return;
+  const s = await getDoc(doc(db, 'chats', curRoomId, 'messages', id));
+  if (!s.exists() || !s.data().fileUrl) { toast('No media to save'); return; }
+  const d = s.data();
+  const item = {url: d.fileUrl, name: d.fileName || 'file', type: d.fileType || '', size: d.fileSize || 0, savedAt: new Date().toISOString()};
+  const stored = JSON.parse(localStorage.getItem('vault') || '{"photos":[],"videos":[],"audio":[],"files":[]}');
+  if (d.fileType?.startsWith('image/')) stored.photos.push(item);
+  else if (d.fileType?.startsWith('video/')) stored.videos.push(item);
+  else if (d.fileType?.startsWith('audio/')) stored.audio.push(item);
+  else stored.files.push(item);
+  localStorage.setItem('vault', JSON.stringify(stored));
+  vaultData = stored;
+  toast('Saved to Vault 💾', 'var(--green)');
+  $('vaultDot').style.display = 'block';
+}
+
+// ── SELECTION ──
+function enterSel() {
+  selMode = true;
+  $('msgsArea').classList.add('select-mode');
+  $('selBar').classList.add('vis');
+}
+function exitSel() {
+  selMode = false;
+  selMsgs.clear();
+  $('msgsArea').classList.remove('select-mode');
+  $('selBar').classList.remove('vis');
+  $('selCount').innerText = '0 selected';
+}
+function toggleSel(id) {
+  if (!selMode) enterSel();
+  if (selMsgs.has(id)) selMsgs.delete(id);
+  else selMsgs.add(id);
+  $('selCount').innerText = `${selMsgs.size} selected`;
+  const chk = document.querySelector(`.sel-chk[data-mid="${id}"]`);
+  if (chk) { chk.classList.toggle('on', selMsgs.has(id)); chk.innerText = selMsgs.has(id) ? '✓' : ''; }
+}
+
+function setupSelBtns() {
+  $('selectBtn').onclick = enterSel;
+  $('cancelSelBtn').onclick = exitSel;
+  $('delSelBtn').onclick = async () => {
+    if (!selMsgs.size) return;
+    if (!confirm(`Delete ${selMsgs.size} message(s)?`)) return;
+    const batch = writeBatch(db);
+    selMsgs.forEach(id => batch.update(doc(db, 'chats', curRoomId, 'messages', id), {deleted: true, text: null, fileUrl: null}));
+    await batch.commit();
+    toast(`${selMsgs.size} deleted`, 'var(--red)');
+    exitSel();
+  };
+  $('fwdSelBtn').onclick = async () => {
+    if (!selMsgs.size) return;
+    const target = prompt('Forward to (email):');
+    if (!target) return;
+    const tu = allUsers.find(u => u.email === target);
+    if (!tu) { toast('User not found', 'var(--red)'); return; }
+    const nr = roomId(me.uid, tu.uid);
+    for (const id of selMsgs) {
+      const s = await getDoc(doc(db, 'chats', curRoomId, 'messages', id));
+      if (s.exists()) await addDoc(collection(db, 'chats', nr, 'messages'), {
+        text: s.data().text || null, fileUrl: s.data().fileUrl || null,
+        fileName: s.data().fileName || null, fileType: s.data().fileType || null,
+        senderId: me.uid, senderName: meData.name, time: serverTimestamp(),
+        forwarded: true, reactions: {}, deleted: false, read: false
+      });
+    }
+    toast(`${selMsgs.size} forwarded!`);
+    exitSel();
+  };
+}
+
+// ── HEADER BUTTONS ──
+function setupHdrBtns() {
+  $('clearChatBtn').onclick = async () => {
+    if (!curRoomId) return;
+    if (!confirm('Clear all messages for you?')) return;
+    const s = await getDocs(collection(db, 'chats', curRoomId, 'messages'));
+    const batch = writeBatch(db);
+    s.forEach(d => batch.update(d.ref, {[`deletedFor.${me.uid}`]: true}));
+    await batch.commit();
+    toast('Chat cleared');
+  };
+  $('searchMsgBtn').onclick = async () => {
+    if (!curRoomId) return;
+    const term = prompt('Search in this chat:');
+    if (!term) return;
+    const s = await getDocs(collection(db, 'chats', curRoomId, 'messages'));
+    const results = [];
+    s.forEach(d => { if ((d.data().text || '').toLowerCase().includes(term.toLowerCase())) results.push(d.data().text); });
+    if (!results.length) toast('No results');
+    else alert(`Found ${results.length} result(s):\n\n${results.slice(0, 5).join('\n—\n')}`);
+  };
+  $('vaultHdrBtn').onclick = () => openVault('photos');
+}
+
+// ── TEXTAREA AUTO-RESIZE ──
+function autoResizeTextarea(ta) {
+  ta.style.height = '22px';
+  const sh = ta.scrollHeight;
+  ta.style.height = Math.min(sh, 110) + 'px';
+}
+
+// ── SEND MESSAGE ──
+async function sendMessage() {
+  const ta = $('msgInput');
+  const text = ta.value.trim();
+  if (!curRoomId) { toast('Select a chat first'); return; }
+  if (!text && !editId) return;
+
+  if (editId) {
+    await updateDoc(doc(db, 'chats', curRoomId, 'messages', editId), {text, edited: true});
+    toast('Updated ✓');
+    cancelEdit();
+    return;
+  }
+
+  const payload = {
+    text, senderId: me.uid, senderName: meData.name || me.email,
+    time: serverTimestamp(), reactions: {}, deleted: false,
+    edited: false, pinned: false, read: false
+  };
+  if (replyTo) { payload.replyTo = replyTo; cancelReply(); }
+
+  ta.value = '';
+  autoResizeTextarea(ta);
+  await addDoc(collection(db, 'chats', curRoomId, 'messages'), payload);
+  playSound();
+}
+
+// ── INPUT SETUP ──
+function setupInput() {
+  const ta = $('msgInput');
+
+  // Auto-resize on input
+  ta.addEventListener('input', () => {
+    autoResizeTextarea(ta);
+    if (!curRoomId) return;
+    const td = doc(db, 'chats', curRoomId, 'typing');
+    updateDoc(td, {[me.uid]: true}).catch(() => setDoc(td, {[me.uid]: true}));
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => updateDoc(td, {[me.uid]: false}).catch(() => {}), 2000);
+  });
+
+  // Enter to send (desktop only — mobile Enter adds newline for better UX)
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && enterSend && !isMobile()) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Send button
+  $('sendBtn').addEventListener('click', e => {
+    e.preventDefault();
+    sendMessage();
+  });
+
+  // On mobile: when input gets focus (keyboard shows), scroll messages to bottom
+  ta.addEventListener('focus', () => {
+    if (isMobile()) {
+      setTimeout(() => {
+        $('msgsArea').scrollTop = $('msgsArea').scrollHeight;
+      }, 400);
+    }
+  });
+}
+
+// ── FILE ATTACH ──
+function setupFile() {
+  const fi = document.createElement('input');
+  fi.type = 'file';
+  fi.accept = 'image/*,video/*,audio/*,.pdf,.doc,.docx,.txt,.zip,.rar,.mp3,.mp4,.wav,.ogg';
+  fi.multiple = true;
+  fi.onchange = async () => {
+    for (const f of fi.files) await uploadFile(f);
+    fi.value = '';
+  };
+  $('attachBtn').onclick = () => {
+    if (!curRoomId) { toast('Select a chat first'); return; }
+    fi.click();
+  };
+}
+
+async function uploadFile(file) {
+  if (!curRoomId) { toast('Select a chat first'); return; }
+  if (file.size > 50 * 1024 * 1024) { toast('Max file size: 50MB', 'var(--red)'); return; }
+  const path = `chat_files/${curRoomId}/${Date.now()}_${file.name}`;
+  const sr2 = sRef(storage, path);
+  const task = uploadBytesResumable(sr2, file);
+  $('uploadProg').classList.add('vis');
+  task.on('state_changed',
+    s => { $('uploadFill').style.width = (s.bytesTransferred / s.totalBytes * 100) + '%'; },
+    err => { toast('Upload failed: ' + err.message, 'var(--red)'); $('uploadProg').classList.remove('vis'); },
+    async () => {
+      const url = await getDownloadURL(task.snapshot.ref);
+      await addDoc(collection(db, 'chats', curRoomId, 'messages'), {
+        text: null, fileUrl: url, fileName: file.name, fileType: file.type,
+        fileSize: file.size, senderId: me.uid, senderName: meData.name,
+        time: serverTimestamp(), reactions: {}, deleted: false, read: false
+      });
+      $('uploadProg').classList.remove('vis');
+      $('uploadFill').style.width = '0';
+      toast('File sent ✓');
+      if (localStorage.getItem('th_autoSave') === 'true') {
+        const item = {url, name: file.name, type: file.type, size: file.size, savedAt: new Date().toISOString()};
+        const stored = JSON.parse(localStorage.getItem('vault') || '{"photos":[],"videos":[],"audio":[],"files":[]}');
+        if (file.type.startsWith('image/')) stored.photos.push(item);
+        else if (file.type.startsWith('video/')) stored.videos.push(item);
+        else if (file.type.startsWith('audio/')) stored.audio.push(item);
+        else stored.files.push(item);
+        localStorage.setItem('vault', JSON.stringify(stored));
+        vaultData = stored;
+      }
+    }
+  );
+}
+
+// ── VOICE RECORDING ──
+function setupVoice() {
+  $('voiceBtn').onclick = async () => {
+    if (!curRoomId) { toast('Select a chat first'); return; }
+    if (!isRec) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+        mediaRec = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRec.ondataavailable = e => audioChunks.push(e.data);
+        mediaRec.onstop = async () => {
+          const blob = new Blob(audioChunks, {type: 'audio/webm'});
+          await uploadFile(new File([blob], `voice_${Date.now()}.webm`, {type: 'audio/webm'}));
+          stream.getTracks().forEach(t => t.stop());
         };
-        mediaRec.start();isRec=true;
-        $('voiceBtn').innerText='⏹️';$('voiceBtn').classList.add('recording');
-        toast('Recording… tap to stop 🎙️','var(--red)');
-      }catch{toast('Microphone access denied','var(--red)');}
-    }else{
-      mediaRec.stop();isRec=false;$('voiceBtn').innerText='🎙️';$('voiceBtn').classList.remove('recording');
+        mediaRec.start();
+        isRec = true;
+        $('voiceBtn').innerText = '⏹️';
+        $('voiceBtn').classList.add('recording');
+        toast('Recording… tap to stop 🎙️', 'var(--red)');
+      } catch { toast('Microphone access denied', 'var(--red)'); }
+    } else {
+      mediaRec.stop();
+      isRec = false;
+      $('voiceBtn').innerText = '🎙️';
+      $('voiceBtn').classList.remove('recording');
     }
   };
 }
 
 // ── LIGHTBOX ──
-function setupLightbox(){
-  $('lbClose').onclick=()=>$('lightbox').classList.remove('open');
-  $('lightbox').onclick=e=>{if(e.target===$('lightbox'))$('lightbox').classList.remove('open');};
+function setupLightbox() {
+  $('lbClose').onclick = () => $('lightbox').classList.remove('open');
+  $('lightbox').onclick = e => { if (e.target === $('lightbox')) $('lightbox').classList.remove('open'); };
 }
 
 // ── VAULT ──
-function setupVault(){
-  vaultData=JSON.parse(localStorage.getItem('vault')||'{"photos":[],"videos":[],"audio":[],"files":[]}');
-  const hasItems=Object.values(vaultData).some(a=>a.length>0);
-  if(hasItems)$('vaultDot').style.display='block';
-  $('vaultBtn').onclick=()=>openVault('photos');
-  $('closeVault').onclick=()=>$('vaultOverlay').classList.remove('open');
-  $('vaultOverlay').addEventListener('click',e=>{if(e.target===$('vaultOverlay'))$('vaultOverlay').classList.remove('open');});
-  document.querySelectorAll('.vt').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.vt').forEach(v=>v.classList.remove('act'));btn.classList.add('act');renderVault(btn.dataset.vt);};});
+function setupVault() {
+  vaultData = JSON.parse(localStorage.getItem('vault') || '{"photos":[],"videos":[],"audio":[],"files":[]}');
+  const hasItems = Object.values(vaultData).some(a => a.length > 0);
+  if (hasItems) $('vaultDot').style.display = 'block';
+  $('vaultBtn').onclick = () => openVault('photos');
+  $('closeVault').onclick = () => $('vaultOverlay').classList.remove('open');
+  $('vaultOverlay').addEventListener('click', e => { if (e.target === $('vaultOverlay')) $('vaultOverlay').classList.remove('open'); });
+  document.querySelectorAll('.vt').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.vt').forEach(v => v.classList.remove('act'));
+      btn.classList.add('act');
+      renderVault(btn.dataset.vt);
+    };
+  });
 }
-function openVault(tab='photos'){
+
+function openVault(tab = 'photos') {
   $('vaultOverlay').classList.add('open');
-  document.querySelectorAll('.vt').forEach(v=>v.classList.toggle('act',v.dataset.vt===tab));
+  document.querySelectorAll('.vt').forEach(v => v.classList.toggle('act', v.dataset.vt === tab));
   renderVault(tab);
 }
-function renderVault(tab){
-  const body=$('vaultBody');
-  vaultData=JSON.parse(localStorage.getItem('vault')||'{"photos":[],"videos":[],"audio":[],"files":[]}');
-  const items=vaultData[tab]||[];
-  if(!items.length){body.innerHTML=`<div class="vault-empty"><div style="font-size:36px;margin-bottom:10px">${{photos:'📷',videos:'🎬',audio:'🎵',files:'📁'}[tab]}</div><div>No ${tab} saved yet</div><div style="font-size:12px;margin-top:6px">Long-press a message and choose "Save to Vault"</div></div>`;return;}
-  if(tab==='photos'){body.innerHTML=`<div class="vault-grid">${items.map(it=>`<div class="vault-thumb" onclick="openLb('${it.url}')"><img src="${it.url}" alt="${esc(it.name)}" loading="lazy"></div>`).join('')}</div>`;}
-  else if(tab==='videos'){body.innerHTML=`<div class="vault-grid">${items.map(it=>`<div class="vault-thumb"><video src="${it.url}" muted style="width:100%;height:100%;object-fit:cover" playsinline></video><div class="v-play">▶</div></div>`).join('')}</div>`;}
-  else if(tab==='audio'){body.innerHTML=items.map(it=>`<div class="audio-item"><div class="audio-ico">🎵</div><div class="audio-info"><div class="audio-name">${esc(it.name)}</div><audio controls src="${it.url}" class="audio-player"></audio></div></div>`).join('');}
-  else{body.innerHTML=items.map(it=>`<div class="vault-file-item"><div class="vf-ico">${fileIcon(it.type)}</div><div class="vf-info"><div class="vf-name">${esc(it.name)}</div><div class="vf-meta">${fileSize(it.size)} · ${new Date(it.savedAt).toLocaleDateString()}</div></div><a class="vf-dl" href="${it.url}" download target="_blank">⬇</a></div>`).join('');}
+
+function renderVault(tab) {
+  const body = $('vaultBody');
+  vaultData = JSON.parse(localStorage.getItem('vault') || '{"photos":[],"videos":[],"audio":[],"files":[]}');
+  const items = vaultData[tab] || [];
+  if (!items.length) {
+    body.innerHTML = `<div class="vault-empty"><div style="font-size:36px;margin-bottom:10px">${{photos:'📷', videos:'🎬', audio:'🎵', files:'📁'}[tab]}</div><div>No ${tab} saved yet</div><div style="font-size:12px;margin-top:6px">Long-press a message and choose "Save to Vault"</div></div>`;
+    return;
+  }
+  if (tab === 'photos') {
+    body.innerHTML = `<div class="vault-grid">${items.map(it => `<div class="vault-thumb" onclick="openLb('${it.url}')"><img src="${it.url}" alt="${esc(it.name)}" loading="lazy"></div>`).join('')}</div>`;
+  } else if (tab === 'videos') {
+    body.innerHTML = `<div class="vault-grid">${items.map(it => `<div class="vault-thumb"><video src="${it.url}" muted style="width:100%;height:100%;object-fit:cover" playsinline></video><div class="v-play">▶</div></div>`).join('')}</div>`;
+  } else if (tab === 'audio') {
+    body.innerHTML = items.map(it => `<div class="audio-item"><div class="audio-ico">🎵</div><div class="audio-info"><div class="audio-name">${esc(it.name)}</div><audio controls src="${it.url}" class="audio-player"></audio></div></div>`).join('');
+  } else {
+    body.innerHTML = items.map(it => `<div class="vault-file-item"><div class="vf-ico">${fileIcon(it.type)}</div><div class="vf-info"><div class="vf-name">${esc(it.name)}</div><div class="vf-meta">${fileSize(it.size)} · ${new Date(it.savedAt).toLocaleDateString()}</div></div><a class="vf-dl" href="${it.url}" download target="_blank">⬇</a></div>`).join('');
+  }
 }
-window.openLb=function(src){$('lbImg').src=src;$('lbDl').href=src;$('lightbox').classList.add('open');$('vaultOverlay').classList.remove('open');};
+
+window.openLb = function(src) {
+  $('lbImg').src = src;
+  $('lbDl').href = src;
+  $('lightbox').classList.add('open');
+  $('vaultOverlay').classList.remove('open');
+};
 
 // ── EMOJI PICKER ──
-function renderEpGrid(f=''){
-  const g=$('epGrid');
-  const list=f?EMOJIS.filter(e=>e.includes(f)):EMOJIS;
-  g.innerHTML=list.map(e=>`<span class="ep-e">${e}</span>`).join('');
-  g.querySelectorAll('.ep-e').forEach(el=>{
-    el.onclick=()=>{
-      const ta=$('msgInput'),p=ta.selectionStart||ta.value.length;
-      ta.value=ta.value.slice(0,p)+el.innerText+ta.value.slice(p);
-      autoResizeTextarea(ta);ta.focus();
+function renderEpGrid(f = '') {
+  const g = $('epGrid');
+  const list = f ? EMOJIS.filter(e => e.includes(f)) : EMOJIS;
+  g.innerHTML = list.map(e => `<span class="ep-e">${e}</span>`).join('');
+  g.querySelectorAll('.ep-e').forEach(el => {
+    el.onclick = () => {
+      const ta = $('msgInput'), p = ta.selectionStart || ta.value.length;
+      ta.value = ta.value.slice(0, p) + el.innerText + ta.value.slice(p);
+      autoResizeTextarea(ta);
+      ta.focus();
       $('emojiPicker').classList.remove('vis');
     };
   });
 }
-$('emojiTrig').addEventListener('click',e=>{
-  e.stopPropagation();e.preventDefault();
-  const p=$('emojiPicker');
-  // Position above input, clamped to screen
-  const r=e.target.getBoundingClientRect();
-  const pickerH=240,pickerW=290;
-  let top=r.top-pickerH-8;let left=r.right-pickerW;
-  if(top<8)top=r.bottom+8;
-  if(left<8)left=8;
-  if(left+pickerW>window.innerWidth-8)left=window.innerWidth-pickerW-8;
-  p.style.top=top+'px';p.style.left=left+'px';p.style.bottom='';p.style.right='';
-  p.classList.toggle('vis');if(p.classList.contains('vis'))renderEpGrid();
+
+$('emojiTrig').addEventListener('click', e => {
+  e.stopPropagation();
+  e.preventDefault();
+  const p = $('emojiPicker');
+  const r = e.target.getBoundingClientRect();
+  const pickerH = 240, pickerW = 290;
+  let top = r.top - pickerH - 8;
+  let left = r.right - pickerW;
+  if (top < 8) top = r.bottom + 8;
+  if (left < 8) left = 8;
+  if (left + pickerW > window.innerWidth - 8) left = window.innerWidth - pickerW - 8;
+  p.style.top = top + 'px';
+  p.style.left = left + 'px';
+  p.style.bottom = '';
+  p.style.right = '';
+  p.classList.toggle('vis');
+  if (p.classList.contains('vis')) renderEpGrid();
 });
-$('epSearch').oninput=e=>renderEpGrid(e.target.value);
 
-// ── MOBILE ──
-function setupMobile(){
-  $('mobileBackBtn').onclick=()=>{
-    $('chatWin').classList.add('hidden');
-    $('sidebar').classList.add('open');
-   $('chatWin').style.display = 'flex';
-  };
-  $('newMsgFab').onclick=()=>{
-    $('chatWin').classList.add('hidden');
-    $('sidebar').classList.add('open');
-   $('chatWin').style.display = 'flex';
-  };
+$('epSearch').oninput = e => renderEpGrid(e.target.value);
 
-  // Handle viewport resize (keyboard open/close on mobile)
-  // Using visualViewport API for reliable keyboard detection
-  if(window.visualViewport){
-    window.visualViewport.addEventListener('resize',()=>{
-      // When keyboard opens, scroll messages to bottom
-      setTimeout(()=>{
-        const a=$('msgsArea');
-        if(a)a.scrollTop=a.scrollHeight;
-      },50);
+// ── MOBILE SETUP ──
+function setupMobile() {
+  // Back button: go from chat back to sidebar
+  $('mobileBackBtn').onclick = () => hideChatOnMobile();
+
+  // FAB: show sidebar (new message)
+  $('newMsgFab').onclick = () => hideChatOnMobile();
+
+  // Handle visualViewport resize (keyboard open/close on mobile)
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => {
+      const chatWin = $('chatWin');
+      if (chatWin.classList.contains('mobile-open')) {
+        // Small delay allows layout to settle
+        setTimeout(() => {
+          const msgs = $('msgsArea');
+          if (msgs) msgs.scrollTop = msgs.scrollHeight;
+        }, 100);
+      }
     });
   }
 }
-if (window.visualViewport) {
-  let prevHeight = window.visualViewport.height;
-  window.visualViewport.addEventListener('resize', () => {
-    const chatWin = $('chatWin');
-    if (!chatWin.classList.contains('hidden')) {
-      setTimeout(() => {
-        const msgs = $('msgsArea');
-        if (msgs) msgs.scrollTop = msgs.scrollHeight;
-      }, 100);
-    }
-  });
-}
-$('newChatBtn').onclick=()=>{
-  const email=prompt('Enter user email to start a chat:');if(!email)return;
-  const u=allUsers.find(u=>u.email?.toLowerCase()===email.toLowerCase());
-  if(u)openChat(u);else toast('User not found','var(--red)');
+// ── MISC BUTTONS ──
+$('newChatBtn').onclick = () => {
+  const email = prompt('Enter user email to start a chat:');
+  if (!email) return;
+  const u = allUsers.find(u => u.email?.toLowerCase() === email.toLowerCase());
+  if (u) openChat(u);
+  else toast('User not found', 'var(--red)');
 };
-$('notifBtn').onclick=()=>toast('Notifications coming soon 🔔');
+
+$('notifBtn').onclick = () => toast('Notifications coming soon 🔔');
 </script>
 </body>
 </html>
